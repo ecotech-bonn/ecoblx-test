@@ -1,0 +1,1 @@
+module.exports={env:{browser:!0,es2021:!0},extends:"eslint:recommended",parserOptions:{ecmaVersion:12,sourceType:"module"},rules:{}};
