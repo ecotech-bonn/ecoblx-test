@@ -1,8 +1,11 @@
-/* jodash.css - (C)JoEmbedded.de  */
+/* jodash.css - (C)JoEmbedded.de
+   Aufbau: 1. Design-Tokens (hell/dunkel)  2. Grundelemente (Text, Knoepfe, Eingaben)
+   3. App-Rahmen (Kopf, Seitenleiste, Inhalt, Fuss)  4. Dialoge  5. Hauptseite (bd-*)
+   6. Terminal/Grafik  7. Parameter-Editoren (pf-*, ce-*) */
 :root {
-    --version: 'V1.03 / 15.02.2025';
+    --version: 'V2.00 / 26.10.2026';
 
-    /* CSS Variablen, extern aenderbar! Farben mit Helligkeitswert*/
+    /* Alte Grau-Palette (von Altcode/Inline-Styles verwendet), im Dunkelmodus invertiert */
     --white100: #ffffff;
     --txtwhite97: #f8f8f8;
     --whitegray94: #f0f0f0;
@@ -19,44 +22,150 @@
     --black0: #000000;
 
     /* Spezialmarkierungen */
-    --red: red;
+    --red: #d32f2f;
     --gold: #ffd000;
-    --orange: #d36804;
+    --orange: #c25e00;
     --brown: #775b0f;
-    --green: #008500;
+    --green: #198754;
     --lime: lime;
     --blue: #1100ff;
     --bleblue: #1E90FF;
     --blebluelight: #ecf4fc;
+
+    /* Design-Tokens: Flaechen, Text, Akzent, Status */
+    --bg: #f3f5f8;
+    --surface: #ffffff;
+    --surface-2: #f2f4f7;
+    --surface-3: #e6e9ee;
+    --border: #e1e5ea;
+    --border-strong: #c8cfd8;
+    --text: #18212c;
+    --text-muted: #5a6676;
+    --text-faint: #8b96a4;
+    --accent: #1c6fd1;
+    --accent-hover: #165db1;
+    --accent-soft: #e8f1fc;
+    --on-accent: #ffffff;
+    --success: #198754;
+    --success-soft: #e5f4ec;
+    --warn: #b25b00;
+    --warn-soft: #fdf1e2;
+    --danger: #c62828;
+    --danger-soft: #fdecec;
+    --mode-meas: var(--accent);
+    --mode-meas-soft: var(--accent-soft);
+    --mode-cache: #c25e00;
+    --mode-cache-soft: #fdf0e2;
+    /* Kopfzeile in Markenfarbe */
+    --header-bg: #10253d;
+    --header-text: #f3f6fa;
+    --header-muted: #9fb2c8;
+
+    --radius-sm: 6px;
+    --radius: 10px;
+    --radius-lg: 14px;
+    --shadow-xs: 0 1px 2px rgba(16, 24, 40, 0.05);
+    --shadow-sm: 0 1px 2px rgba(16, 24, 40, 0.05), 0 1px 3px rgba(16, 24, 40, 0.07);
+    --shadow-lg: 0 24px 48px -12px rgba(16, 24, 40, 0.3);
+    --ring: 0 0 0 3px rgba(28, 111, 209, 0.28);
+    --ring-danger: 0 0 0 3px rgba(198, 40, 40, 0.22);
+    --font: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --mono: ui-monospace, "Cascadia Mono", Consolas, "SF Mono", Menlo, monospace;
+    color-scheme: light;
 
     /* *** App Scaling ***  Einrueckung/Dyn. Elemente. Koennen gesetzt und gelesen werden. */
     /* Default Font: 16px == 1em, 0.5..2.0 OK */
     --fontrel: 1;
     --scrollms: 200ms;
     /* Maximalbreite Sidebar, so dass alles i.d.R. reinpasst */
-    --lnavwidth_max: calc(32px + var(--fontrel)*200px);
+    --lnavwidth_max: calc(40px + var(--fontrel)*200px);
 
-    /* Heights Header/Footer, unterschiedlich falls noch Menues rein muessen */
-    --hdrheight: calc(16px + var(--fontrel)*32px);
-    --ftrheight: calc(16px + var(--fontrel)*16px);
+    /* Heights Header/Footer */
+    --hdrheight: calc(20px + var(--fontrel)*32px);
+    --ftrheight: calc(12px + var(--fontrel)*18px);
 
     /* Nifty icon, taken from 'pico.css' use as e.g. <img width='128' style="content: var(--icon-loading);"> or background-image:, etc */
     --icon-loading: url("data:image/svg+xml,%3Csvg fill='none' height='24' width='24' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg' %3E%3Cstyle%3E g %7B animation: rotate 2s linear infinite; transform-origin: center center; %7D circle %7B stroke-dasharray: 75,100; stroke-dashoffset: -5; animation: dash 1.5s ease-in-out infinite; stroke-linecap: round; %7D @keyframes rotate %7B 0%25 %7B transform: rotate(0deg); %7D 100%25 %7B transform: rotate(360deg); %7D %7D @keyframes dash %7B 0%25 %7B stroke-dasharray: 1,100; stroke-dashoffset: 0; %7D 50%25 %7B stroke-dasharray: 44.5,100; stroke-dashoffset: -17.5; %7D 100%25 %7B stroke-dasharray: 44.5,100; stroke-dashoffset: -62; %7D %7D %3C/style%3E%3Cg%3E%3Ccircle cx='12' cy='12' r='10' fill='none' stroke='grey' stroke-width='4' /%3E%3C/g%3E%3C/svg%3E");
 }
 
+/* Dunkelmodus: Setup 'Theme Dark' setzt data-theme="dark" (dashToggleTheme) */
+:root[data-theme="dark"] {
+    --white100: #000000;
+    --txtwhite97: #070707;
+    --whitegray94: #0f0f0f;
+    --lightgray88: #1f1f1f;
+    --infogray82: #2f2f2f;
+    --hovergray75: #3f3f3f;
+    --silvergray69: #4f4f4f;
+    --menugray63: #5f5f5f;
+    --midgray50: #7f7f7f;
+    --lowmidgray38: #9f9f9f;
+    --darkgray25: #bfbfbf;
+    --nightgray13: #dfdfdf;
+    --txtblack3: #f7f7f7;
+    --black0: #ffffff;
+    --red: #ff6b6b;
+    --orange: #f0954a;
+    --green: #4cc38a;
+
+    --bg: #0e1319;
+    --surface: #161c24;
+    --surface-2: #1d252f;
+    --surface-3: #27313d;
+    --border: #2a3440;
+    --border-strong: #3a4654;
+    --text: #e6ebf1;
+    --text-muted: #a3afbd;
+    --text-faint: #75818f;
+    --accent: #4b93ea;
+    --accent-hover: #6aa7f0;
+    --accent-soft: #19304b;
+    --on-accent: #ffffff;
+    --success: #4cc38a;
+    --success-soft: #15301f;
+    --warn: #f0a050;
+    --warn-soft: #36260f;
+    --danger: #ff6b6b;
+    --danger-soft: #3a1a1a;
+    --mode-cache: #f0954a;
+    --mode-cache-soft: #3a2712;
+    --header-bg: #0a1621;
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 24px 48px -12px rgba(0, 0, 0, 0.7);
+    --ring: 0 0 0 3px rgba(75, 147, 234, 0.35);
+    color-scheme: dark;
+}
+
+/* ===================== 2. Grundelemente ===================== */
 html,
 body {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-
-    background-color: var(--white100);
-    color: var(--txtblack3);
-
-    font-family: sans-serif;
+    background-color: var(--bg);
+    color: var(--text);
+    font-family: var(--font);
     font-size: calc(var(--fontrel) * 16px);
-    font-family: Arial, Helvetica, sans-serif;
+    line-height: 1.4;
+    -webkit-font-smoothing: antialiased;
+}
 
+[hidden] {
+    display: none !important;
+}
+
+a {
+    color: var(--accent);
+}
+
+hr {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 0.8em 0;
+}
+
+code {
+    font-family: var(--mono);
 }
 
 /* Variable Breakpoints: Nur auf Mobiles: <br class='mobile-br'> */
@@ -66,23 +175,224 @@ body {
     }
 }
 
-/* ---Only for checkbox set size --- */
 select,
 option,
-input {
+input,
+textarea {
+    font-family: inherit;
     font-size: inherit;
 }
 
-input:invalid {
-    border-color: var(--red);
-    outline: 0.2em solid var(--red);
+/* Eingabefelder: einheitliche Hoehe, weicher Rahmen, Fokusring */
+input:not([type]),
+input[type=text],
+input[type=number],
+input[type=password],
+input[type=search],
+input[type=url],
+select,
+textarea {
+    color: var(--text);
+    background-color: var(--surface);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-sm);
+    padding: 0.38em 0.55em;
+    line-height: 1.25;
+    min-height: 2.2em;
+    box-sizing: border-box;
+    transition: border-color 0.12s, box-shadow 0.12s;
+
+    &:hover:not(:disabled) {
+        border-color: var(--text-faint);
+    }
+
+    &:focus {
+        outline: none;
+        border-color: var(--accent);
+        box-shadow: var(--ring);
+    }
+
+    &:disabled {
+        background-color: var(--surface-2);
+        color: var(--text-faint);
+        cursor: not-allowed;
+    }
 }
 
-input[type=checkbox] {
+select {
+    appearance: none;
+    padding-right: 1.9em;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='%237b8794' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' d='m4 6 4 4 4-4'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.55em center;
+    cursor: pointer;
+}
+
+input:invalid {
+    border-color: var(--danger);
+    box-shadow: var(--ring-danger);
+}
+
+input[type=checkbox],
+input[type=radio] {
     margin: 0;
-    width: 1em;
-    height: 1em;
-    vertical-align: -0.125em;
+    width: 1.05em;
+    height: 1.05em;
+    vertical-align: -0.15em;
+    accent-color: var(--accent);
+    cursor: pointer;
+}
+
+/* Schalter statt Haken: <input type="checkbox" class="jo-switch"> */
+input[type=checkbox].jo-switch {
+    appearance: none;
+    position: relative;
+    flex: none;
+    width: 2.1em;
+    height: 1.2em;
+    border-radius: 999px;
+    background-color: var(--border-strong);
+    transition: background-color 0.15s;
+    vertical-align: -0.3em;
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0.15em;
+        left: 0.15em;
+        width: 0.9em;
+        height: 0.9em;
+        border-radius: 50%;
+        background-color: #ffffff;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+        transition: transform 0.15s;
+    }
+
+    &:checked {
+        background-color: var(--accent);
+
+        &::before {
+            transform: translateX(0.9em);
+        }
+    }
+
+    &:focus-visible {
+        outline: none;
+        box-shadow: var(--ring);
+    }
+
+    &:disabled {
+        opacity: 0.45;
+        cursor: not-allowed;
+    }
+}
+
+/* Knoepfe: Standard = hell mit Rahmen, .bd-primary/OK = Akzent, .bd-danger = rot */
+button {
+    font-family: inherit;
+    font-size: 1em;
+    line-height: 1.25;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45em;
+    padding: 0.42em 0.85em;
+    min-height: 2.2em;
+    box-sizing: border-box;
+    background-color: var(--surface);
+    color: var(--text);
+    border: 1px solid var(--border-strong);
+    border-radius: 8px;
+    box-shadow: var(--shadow-xs);
+    font-weight: 500;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background-color 0.12s, border-color 0.12s, box-shadow 0.12s, color 0.12s;
+
+    &:hover:not(:disabled) {
+        background-color: var(--surface-2);
+        border-color: var(--text-faint);
+    }
+
+    &:active:not(:disabled) {
+        transform: translateY(1px);
+    }
+
+    &:focus-visible {
+        outline: none;
+        box-shadow: var(--ring);
+    }
+
+    &:disabled {
+        opacity: 0.45;
+        cursor: not-allowed;
+    }
+}
+
+button.bd-primary,
+dialog .jo-dialog-buttonok {
+    background-color: var(--accent);
+    border-color: var(--accent);
+    color: var(--on-accent);
+
+    &:hover:not(:disabled) {
+        background-color: var(--accent-hover);
+        border-color: var(--accent-hover);
+    }
+}
+
+button.bd-danger:not(:disabled) {
+    color: var(--danger);
+
+    &:hover {
+        background-color: var(--danger-soft);
+        border-color: var(--danger);
+    }
+}
+
+/* Nur Symbol, ohne Rahmen (z.B. Schliessen, Aufklappen) */
+button.jo-ghost,
+button.bd-small {
+    background-color: transparent;
+    border-color: transparent;
+    box-shadow: none;
+    color: var(--text-muted);
+
+    &:hover:not(:disabled) {
+        background-color: var(--surface-2);
+        border-color: transparent;
+        color: var(--text);
+    }
+}
+
+button.bd-small {
+    font-size: 0.85em;
+    min-height: auto;
+    padding: 0.3em 0.55em;
+}
+
+progress {
+    appearance: none;
+    height: 6px;
+    border: none;
+    border-radius: 999px;
+    overflow: hidden;
+    background-color: var(--surface-3);
+    vertical-align: middle;
+
+    &::-webkit-progress-bar {
+        background-color: var(--surface-3);
+    }
+
+    &::-webkit-progress-value {
+        background-color: var(--accent);
+        border-radius: 999px;
+        transition: width 0.3s;
+    }
+
+    &::-moz-progress-bar {
+        background-color: var(--accent);
+    }
 }
 
 /* Fuer PWA: Hide Install button 'joInstallApp' until beforeinstallprompt fires */
@@ -195,7 +505,7 @@ input[type=checkbox] {
 
 /* Alles mit BLE: */
 .bleblue {
-    color: var(--bleblue);
+    color: var(--accent);
 }
 
 .blebluelight {
@@ -219,7 +529,6 @@ input[type=checkbox] {
     background-color: var(--black0);
 }
 
-
 /* === Bei Icons Hintergrundfarb im ::before festgelegt, kann nur via class gesetzt werden (z.B. fuer Animationen) ===*/
 .jo-icon-back-white {
     &::before {
@@ -239,11 +548,12 @@ input[type=checkbox] {
     }
 }
 
-/*--- Spacer (thin black line) (separate Menue items )---*/
+/*--- Spacer (separate Menue items) ---*/
 .jo-thin-hr {
     border: 0;
     height: 1px;
-    background: linear-gradient(to right, rgba(0, 0, 0, 0) 0%, var(--midgray50) 1em, var(--midgray50) calc(100% - 1em), rgba(0, 0, 0, 0) 100%);
+    margin: 0.4em 0.5em;
+    background-color: var(--border);
 }
 
 /* Plaziert einen EIntrag in einer Flexbox (Mneues) rechts, z.B. fuer Menues */
@@ -252,12 +562,13 @@ input[type=checkbox] {
 }
 
 .jo-font-small {
-    font-size: 0.7em;
+    font-size: 0.75em;
 }
 
 /* Rahmen 0.1em aussenrum */
 .jo-padding-s {
-    padding: 0.15em;
+    padding: 0.15em 0.5em;
+    border-radius: 999px;
 }
 
 /* Element verstecken als Klasse einfacher */
@@ -265,94 +576,141 @@ input[type=checkbox] {
     display: none;
 }
 
-/* Die UI-Container mit ihren speziellen Elementen als nested CSS*/
+/* ===================== 3. App-Rahmen ===================== */
 .jo-vcontainer {
     display: flex;
     flex-direction: column;
     height: 100dvh;
     overflow: hidden;
 
-    /* header footer START */
     .jo-menu-header {
         display: flex;
-        /* flex-direction: row; // default */
-        background-color: var(--nightgray13);
-        color: var(--txtwhite97);
-        padding: .2em;
-        height: var(--hdrheight);
-        /* align-items: center: Alle auf einer Linie */
         align-items: center;
+        gap: 0.6em;
+        background-color: var(--header-bg);
+        color: var(--header-text);
+        padding: 0 0.75em 0 0.5em;
+        height: var(--hdrheight);
+        box-sizing: border-box;
 
-        /* Main Hamburger in 2s mit Indidkator */
+        /* Hamburger mit Richtungsanzeige (jodash.js dreht .jo-main-hambind) */
         .jo-main-hamb {
             position: relative;
-            background-color: var(--txtwhite97);
-            color: var(--txtblack3);
-            border-radius: 0.2em;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 2.3em;
+            height: 2.3em;
+            border-radius: 8px;
+            cursor: pointer;
+            color: var(--header-text);
 
             &>i {
-                font-size: 2em;
+                font-size: 1.55em;
             }
 
             .jo-main-hambind {
                 position: absolute;
-                bottom: -0.1em;
-                right: -0.1em;
-                color: var(--bleblue);
+                bottom: 0.05em;
+                right: 0.05em;
+                font-size: 0.7em;
+                color: var(--header-muted);
                 rotate: 90deg;
             }
 
             &:hover {
-                background-color: var(--hovergray75);
+                background-color: rgba(255, 255, 255, 0.1);
+            }
+        }
+
+        .jo-brand {
+            display: flex;
+            align-items: baseline;
+            gap: 0.6em;
+            min-width: 0;
+            white-space: nowrap;
+
+            & b {
+                font-size: 1.15em;
+                font-weight: 700;
+                letter-spacing: 0.01em;
+            }
+
+            & b span {
+                color: #6fb3ff;
+            }
+
+            & .jo-version {
+                font-size: 0.72em;
+                color: var(--header-muted);
+                overflow: hidden;
+                text-overflow: ellipsis;
             }
         }
     }
 
     .jo-menu-footer {
         display: flex;
-        /* flex-direction: row; // default */
-        background-color: var(--nightgray13);
-        color: var(--txtwhite97);
-        gap: 0.5em;
-        padding: .2em;
-        height: var(--ftrheight);
-        /* align-items: center: Alle auf einer Linie */
         align-items: center;
+        gap: 0.75em;
+        background-color: var(--surface);
+        border-top: 1px solid var(--border);
+        color: var(--text-muted);
+        font-size: 0.82em;
+        padding: 0 0.75em;
+        height: var(--ftrheight);
+        box-sizing: border-box;
+        white-space: nowrap;
+
+        & button {
+            font-size: 0.95em;
+            min-height: auto;
+            padding: 0.15em 0.6em;
+        }
     }
 
-    /* header footer  ENDE */
-
     .jo-chcontent {
-        /* border: 4px solid goldenrod; */
 
         .jo-sidebarcontent {
             display: flex;
-            /* flex-direction: row; // default */
-            /* border: 4px solid blue; */
 
-            /* ====== Komponenten ====== */
+            /* ====== Seitenleiste ====== */
             .jo-sidebar {
                 height: calc(100svh - var(--hdrheight) - var(--ftrheight));
                 flex: 0 0 var(--lnavwidth_max);
                 transition: flex-basis var(--scrollms);
-                background-color: var(--whitegray94);
-
-                color: var(--txtblack3);
-                padding-right: 0.1em;
+                background-color: var(--surface);
+                border-right: 1px solid var(--border);
+                color: var(--text);
+                padding: 0.4em 0.35em;
+                box-sizing: border-box;
                 overflow: auto;
+                overflow-x: hidden;
 
                 /* Small: Only Icons */
                 &.jo-sidebar-small {
-                    flex: 0 0 2.7em;
+                    flex: 0 0 2.9em;
+                    padding: 0.4em 0.2em;
 
-                    /* Platz fuer dickeren Scrollbar auf Desktop */
                     @media (min-width:551px) {
-                        flex: 0 0 3.7em;
+                        flex: 0 0 3.6em;
+                        padding: 0.4em 0.3em;
+                    }
+
+                    .jo-sibu {
+                        padding-left: 0.45em;
+                        padding-right: 0.2em;
                     }
 
                     /* Text invisible */
                     span:nth-child(2) {
                         color: rgba(0, 0, 0, 0);
+                    }
+
+                    .jo-sinavinfo {
+                        color: transparent;
+                        height: 0.4em;
+                        padding: 0;
                     }
                 }
 
@@ -362,14 +720,15 @@ input[type=checkbox] {
                 }
 
                 .jo-sinavinfo {
-                    padding: .1em 0.33em;
-                    background-color: var(--silvergray69);
+                    padding: 0.9em 0.6em 0.3em 0.6em;
+                    color: var(--text-faint);
                     font-size: 0.7em;
-                    font-weight: bold;
+                    font-weight: 700;
+                    text-transform: uppercase;
+                    letter-spacing: 0.06em;
                     white-space: nowrap;
                     overflow: hidden;
                     text-overflow: ellipsis;
-                    height: 1.2em;
                 }
 
                 /* sibu: ***Side-Button*** */
@@ -378,225 +737,912 @@ input[type=checkbox] {
                     position: relative;
                     align-items: center;
                     flex-wrap: nowrap;
-
-                    background-color: var(--lightgray88);
-                    text-decoration: none;
-
-                    padding: 0.6em 0.33em;
+                    margin: 1px 0;
+                    padding: 0.5em 0.6em;
+                    border-radius: 8px;
                     cursor: pointer;
                     white-space: nowrap;
                     overflow: hidden;
+                    font-weight: 500;
+                    transition: background-color 0.12s;
 
-                    /* Icons im Button groesser, nur direkte Kids, Icons in Buttons daher z.B. in span */
+                    /* Icons im Button, nur direkte Kids, Icons in Buttons daher z.B. in span */
                     &>i::before {
-                        font-size: 1.5em;
-                        vertical-align: -0.25em;
-                        margin-right: 0.5em;
+                        font-size: 1.25em;
+                        vertical-align: -0.2em;
+                        margin-right: 0.75em;
                     }
 
-                    /* optinale Sub-Componente: Badge innerhalb eines jo-sibu */
+                    &>i {
+                        color: var(--text-muted);
+                    }
+
+                    &.bleblue>i,
+                    &.green>i {
+                        color: inherit;
+                    }
+
+                    /* optionale Sub-Componente: Badge innerhalb eines jo-sibu */
                     .jo-badge-span {
                         position: absolute;
-                        background-color: var(--orange);
-                        color: var(--white100);
-                        top: 0.8em;
-                        right: 0.1em;
-                        border-radius: 1em;
-                        padding: 0.1em 0.3em;
-                        font-size: 0.9em;
+                        background-color: var(--warn);
+                        color: #ffffff;
+                        top: 50%;
+                        translate: 0 -50%;
+                        right: 0.4em;
+                        border-radius: 999px;
+                        padding: 0.1em 0.45em;
+                        font-size: 0.75em;
+                        font-weight: 600;
                         text-align: center;
-                        vertical-align: middle;
                         min-width: 1em;
-                        min-height: 1em;
 
                         &.jo-badge-unimportant {
-                            background-color: var(--lowmidgray38);
+                            background-color: var(--surface-3);
+                            color: var(--text-muted);
 
                             .jo-sidebar-small & {
                                 display: none;
                             }
                         }
 
-                        /* Normal: auch klein mit Inhalt, 1-2 Zeichen max. */
+                        /* Klein: nur Punkt am Symbol */
                         .jo-sidebar-small & {
-                            /* inverse Hierarchie */
-                            top: 0.3em;
+                            top: 0.35em;
+                            translate: none;
                             left: 1.5em;
+                            right: auto;
                             padding: 0;
-                            font-size: 0.8em;
+                            font-size: 0.7em;
                             max-width: 1.4em;
                             overflow: hidden;
 
-                            /* -smallcircle Klein NUR Indikator, invisible text */
                             .jo-badge-smallcircle & {
                                 color: rgba(0, 0, 0, 0);
-                                width: 1em;
-                                height: 1em;
-                                overflow: hidden;
+                                width: 0.9em;
+                                height: 0.9em;
+                                min-width: 0;
+                                border: 2px solid var(--surface);
                             }
                         }
                     }
 
-                    /* Button verstecken als Klasse einfacher */
                     &.jo-disabled {
-                        opacity: 0.5;
+                        opacity: 0.45;
                         cursor: not-allowed;
                     }
 
-                    &:hover {
-                        transition: all ease var(--scrollms);
-                        background-color: var(--hovergray75);
-                        border-radius: 0.3em;
+                    /* Bereich ist gerade sichtbar (checkViewportEnablers) */
+                    &.jo-active {
+                        background-color: var(--accent-soft);
+                        color: var(--accent);
+
+                        &>i {
+                            color: var(--accent);
+                        }
+                    }
+
+                    &:hover:not(.jo-disabled) {
+                        background-color: var(--surface-2);
                     }
                 }
 
-                /* Sidebar Elements Ende */
+                #nav-devicelist .jo-sibu {
+                    font-weight: 400;
+                    font-size: 0.92em;
+                }
             }
 
+            /* ====== Inhalt ====== */
             .jo-content {
-                /* border: 4px solid green; */
                 height: calc(100svh - var(--hdrheight) - var(--ftrheight));
                 flex: 1;
-                white-space: nowrap;
+                min-width: 0;
                 overflow: auto;
                 scroll-behavior: smooth;
+                background-color: var(--bg);
 
                 .jo-user-section {
-                    /* height: calc(100svh - var(--hdrheight) - var(--ftrheight) - 1em); */
-                    /* overflow: hidden; */
-                    background-color: var(--white100);
-                    color: var(--txtblack3);
+                    color: var(--text);
                     font-size: calc(1rem * var(--fontrel));
-                    padding: 0.5em;
+                    max-width: 76em;
+                    margin: 0 auto;
+                    padding: 1.25em 1.5em 0.5em 1.5em;
                     display: flex;
                     flex-direction: column;
 
-                    & .jo-stdcanvas {
-                        height: calc((100svh - var(--hdrheight) - var(--ftrheight)) * 0.66);
-                        /* background-color: #FF0; */
+                    @media (max-width: 600px) {
+                        padding: 0.75em 0.75em 0.25em 0.75em;
                     }
 
+                    & .jo-stdcanvas {
+                        height: calc((100svh - var(--hdrheight) - var(--ftrheight)) * 0.66);
+                        background-color: var(--surface);
+                        border: 1px solid var(--border);
+                        border-radius: var(--radius);
+                        overflow: hidden;
+                    }
                 }
             }
         }
     }
 }
 
-/* Dialoge alle moeglichst aehnlich */
-button {
-    font-size: 1em;
-    padding: 0.1em 0.3em;
-    background-color: var(--lightgray88);
-    color: var(--txtblack3);
-    border-radius: 0.3em;
-    border: 1px solid var(--txtblack3);
+/* Ueberschrift eines Bereichs (Grafik, Terminal) */
+.jo-section-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5em;
+    margin: 0.5em 0 0.75em 0;
 
-    &:hover {
-        background-color: var(--hovergray75)
+    & h2 {
+        font-size: 1.1em;
+        font-weight: 650;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 0.5em;
+
+        & i {
+            color: var(--text-muted);
+        }
     }
-
-    &:disabled {
-        opacity: 0.5;
-        cursor: not-allowed;
-    }
-
 }
 
-dialog {
-    position: relative;
-    border-radius: 0.5em;
-    border: 1px solid var(--txtblack3);
-    color: var(--txtblack3);
-    background-color: var(--txtwhite97);
-    min-width: 35%;
-    max-width: 90%;
-    padding: 0.8em;
-    /* Anscheinend fuer Leaflet Z-index >=401.. */
-    z-index: 1000;
-    white-space: nowrap;
+/* Internet-Status im Fuss: Punkt + Text */
+.bd-net {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
 
-    .jo-dialog-progress {
-        width: calc(100% - 2.5em);
-        margin-bottom: 0.5em;
+    &::before {
+        content: '';
+        width: 0.55em;
+        height: 0.55em;
+        border-radius: 50%;
+        background-color: currentColor;
     }
 
-    /* Scroller-Content, passend fuer Header und 1 Ueberschriftszeile */
+    &.bd-net-on {
+        color: var(--success);
+    }
+
+    &.bd-net-off {
+        color: var(--danger);
+    }
+}
+
+/* ===================== 4. Dialoge ===================== */
+dialog {
+    position: relative;
+    box-sizing: border-box;
+    border: none;
+    border-radius: var(--radius-lg);
+    color: var(--text);
+    background-color: var(--surface);
+    box-shadow: var(--shadow-lg);
+    min-width: min(26em, 92vw);
+    max-width: 92vw;
+    max-height: calc(100dvh - 2em);
+    padding: 1.2em 1.4em 1.1em 1.4em;
+    /* Anscheinend fuer Leaflet Z-index >=401.. */
+    z-index: 1000;
+    white-space: normal;
+
+    &::backdrop {
+        background-color: rgba(12, 20, 32, 0.45);
+        backdrop-filter: blur(2px);
+    }
+
+    /* Spalte: lange Inhalte (Editoren) scrollen innen, Kopf und Knoepfe bleiben sichtbar */
+    &[open]:not(#qrscanner-dialog) {
+        display: flex;
+        flex-direction: column;
+        animation: jodlgin 0.16s ease-out;
+    }
+
+    .jo-dialog-content:has(> .jo-dialog-big) {
+        display: flex;
+        flex-direction: column;
+        flex: 1 1 auto;
+        min-height: 0;
+    }
+
+    .jo-dialog-progress {
+        display: block;
+        width: calc(100% - 2.5em);
+        margin-bottom: 0.8em;
+    }
+
+    /* Scroll-Inhalt (Editoren, Listen) */
     .jo-dialog-big {
-        border: 1px solid var(--silvergray69);
+        background-color: var(--bg);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
         overflow: auto;
-        max-height: calc(85vh - 5em);
-        padding: 0.8em;
+        flex: 1 1 auto;
+        min-height: 6em;
+        padding: 1em;
     }
 
     .jo-dialog-buttonclose {
         margin: 0;
         position: absolute;
+        top: 0.75em;
+        right: 0.75em;
+        width: 2.1em;
+        height: 2.1em;
+        min-height: 0;
+        padding: 0;
         border: none;
-        top: 0;
-        right: 0;
-        padding: 0.3em;
+        background-color: transparent;
+        box-shadow: none;
+        color: var(--text-muted);
 
-        &:hover {
-            background-color: var(--hovergray75)
+        &:hover:not(:disabled) {
+            background-color: var(--surface-2);
+            color: var(--text);
         }
     }
 
     .jo-dialog-header {
-        font-size: 1.2em;
-        font-weight: bold;
-        padding-bottom: 0.5em;
+        font-size: 1.15em;
+        font-weight: 650;
+        padding: 0 2.2em 0.7em 0;
+        line-height: 1.3;
     }
 
+    .jo-dialog-content {
+        overflow-wrap: anywhere;
+    }
+
+    /* Knoepfe rechts (OK/Senden ganz rechts), Zusatzknoepfe links */
     .jo-dialog-footer {
-        padding-top: 0.5em;
-        text-align: center;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 0.5em;
+        padding-top: 1em;
+
+        & .jo-dialog-buttons-customextra {
+            order: -1;
+            margin-right: auto;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5em;
+        }
+
+        & .jo-dialog-buttons-customextra:empty {
+            display: none;
+        }
+    }
+
+    /* Sicherheitsabfrage: erst bestaetigen, dann OK */
+    .ok-dialog-check {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4em;
+        color: var(--warn);
+        background-color: var(--warn-soft);
+        border-radius: 8px;
+        padding: 0.35em 0.6em;
+        cursor: pointer;
     }
 
     /* Spinner bekommt Sonderbehandlung */
     &#spinner-dialog {
-        color: var(--bleblue);
         overflow: hidden;
         text-align: center;
-        min-width: 60%;
+        min-width: min(24em, 92vw);
+        padding: 1.6em 1.6em 1.3em 1.6em;
 
-        & i {
-            font-size: 5em;
+        & > div:first-child i {
+            font-size: 2.6em;
+            color: var(--accent);
         }
 
         & progress {
-            width: 90%;
+            width: 100%;
+            margin-top: 0.8em;
+        }
+
+        & h2 {
+            font-size: 1.1em;
+            font-weight: 650;
+            margin: 0.6em 0 0.2em 0;
+        }
+
+        & #spinnerInfo {
+            color: var(--text-muted);
+            font-size: 0.9em;
+            min-height: 1.2em;
+        }
+
+        & br {
+            display: none;
+        }
+
+        & .jo-buttoncancel {
+            margin-top: 1em;
         }
     }
 }
 
-/* Parameter-Editor (params.js): Geraete-/Kanal-/Systemparameter */
-.pf-editor {
-    white-space: normal;
-    width: min(60em, 80vw);
-    box-sizing: border-box;
-
-    & input:disabled {
-        background-color: var(--lightgray88);
-        color: var(--midgray50);
+@keyframes jodlgin {
+    from {
+        opacity: 0;
+        transform: translateY(8px) scale(0.98);
     }
 }
 
+/* Kleine Bildschirme: Dialog als Blatt von unten, volle Breite */
+@media (max-width: 600px) {
+    dialog:not(#spinner-dialog):not(#qrscanner-dialog) {
+        width: 100vw;
+        max-width: 100vw;
+        min-width: 0;
+        margin: auto 0 0 0;
+        border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+        max-height: 94dvh;
+        padding: 1em 0.9em 0.9em 0.9em;
+
+        .jo-dialog-big {
+            padding: 0.6em;
+        }
+
+        /* Zusatzknoepfe nebeneinander, Hauptknopf volle Breite */
+        .jo-dialog-footer {
+            & .jo-dialog-buttons-customextra {
+                flex: 1 1 100%;
+                margin-right: 0;
+            }
+
+            & button {
+                flex: 1 1 0;
+                font-size: 0.92em;
+            }
+        }
+    }
+
+    .bd-mono {
+        font-size: 0.82em;
+    }
+}
+
+/* Kurze Rueckmeldung ohne Dialog (JD.toast) */
+.jo-toasts {
+    position: fixed;
+    left: 50%;
+    bottom: calc(var(--ftrheight) + 1em);
+    translate: -50% 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5em;
+    z-index: 2000;
+    pointer-events: none;
+    width: max-content;
+    max-width: 92vw;
+}
+
+.jo-toast {
+    display: flex;
+    align-items: center;
+    gap: 0.6em;
+    background-color: var(--text);
+    color: var(--bg);
+    border-radius: var(--radius);
+    padding: 0.7em 1.1em;
+    box-shadow: var(--shadow-lg);
+    font-size: 0.95em;
+    animation: jotoastin 0.2s ease-out;
+    white-space: normal;
+
+    & i {
+        font-size: 1.2em;
+    }
+
+    &.jo-toast-ok i {
+        color: #4cc38a;
+    }
+
+    &.jo-toast-warn i {
+        color: #f0a050;
+    }
+
+    &.jo-toast-out {
+        opacity: 0;
+        transition: opacity 0.3s;
+    }
+}
+
+@keyframes jotoastin {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+}
+
+/* ===================== 5. Hauptseite (index.html/blxdash.js) ===================== */
+.bd-card,
+.bd-status,
+.bd-action {
+    white-space: normal;
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-sm);
+    padding: 1em 1.1em;
+    margin-bottom: 1em;
+}
+
+/* Status-Karte: Symbol im farbigen Kreis, Titel, naechster Schritt, Knopf */
+.bd-status {
+    display: flex;
+    align-items: center;
+    gap: 0.9em 1em;
+    flex-wrap: wrap;
+    padding: 1.1em 1.2em;
+
+    &>i {
+        flex: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 2.4em;
+        height: 2.4em;
+        border-radius: 50%;
+        font-size: 1.25em;
+        color: var(--text-muted);
+        background-color: var(--surface-2);
+    }
+
+    &.bd-status-busy>i,
+    &.bd-status-pin>i {
+        color: var(--warn);
+        background-color: var(--warn-soft);
+    }
+
+    &.bd-status-on {
+        border-color: color-mix(in srgb, var(--success) 35%, var(--border));
+
+        &>i {
+            color: var(--success);
+            background-color: var(--success-soft);
+        }
+    }
+
+    & .bd-status-text {
+        display: flex;
+        flex-direction: column;
+        flex: 1 1 8em;
+        min-width: 0;
+        gap: 0.15em;
+
+        & b {
+            font-size: 1.1em;
+            font-weight: 650;
+        }
+    }
+
+    & button {
+        min-width: 9em;
+    }
+
+    @media (max-width: 600px) {
+        & button {
+            flex: 1 1 100%;
+        }
+    }
+}
+
+.bd-hint {
+    font-size: 0.86em;
+    color: var(--text-muted);
+}
+
+/* Geraete-Info: Kennwerte nebeneinander (schmal: 2 Spalten) */
+.bd-info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 11em), 1fr));
+    gap: 0.8em 1.2em;
+
+    @media (max-width: 600px) {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.bd-kv {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1em;
+    min-width: 0;
+
+    &>:first-child {
+        font-size: 0.72em;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: var(--text-faint);
+    }
+
+    &>:last-child {
+        overflow-wrap: anywhere;
+    }
+}
+
+.bd-mono {
+    font-family: var(--mono);
+    font-size: 0.92em;
+}
+
+.bd-device {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.8em 1.5em;
+
+    & .bd-info-grid {
+        flex: 1 1 30em;
+    }
+}
+
+.bd-check {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5em;
+    cursor: pointer;
+    user-select: none;
+}
+
+/* PIN-Eingabe: hervorgehoben */
+.bd-attention {
+    border-color: color-mix(in srgb, var(--warn) 45%, var(--border));
+    background-color: var(--warn-soft);
+
+    & i.bi-shield-lock {
+        color: var(--warn);
+    }
+}
+
+.bd-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5em;
+    margin-top: 0.5em;
+}
+
+/* Aktionen: Karten-Raster (1 Spalte auf Mobiles) */
+.bd-actions {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 19em), 1fr));
+    gap: 1em;
+    margin-bottom: 1em;
+
+    & .bd-action {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.55em;
+        margin-bottom: 0;
+
+        &>.bd-row {
+            margin-top: 0;
+        }
+    }
+}
+
+/* Ergebnis einer Aktion (Werte, Speicher, Zeit) */
+.bd-result {
+    align-self: stretch;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.2em 0.6em;
+    background-color: var(--surface-2);
+    border-radius: 8px;
+    padding: 0.45em 0.7em;
+    font-size: 0.92em;
+    margin-top: auto;
+
+    &>.bd-result-label {
+        color: var(--text-muted);
+        font-size: 0.9em;
+    }
+
+    &>:last-child {
+        font-weight: 600;
+        font-variant-numeric: tabular-nums;
+    }
+}
+
+/* Messwerte: Kanal | Name | Wert */
+.bd-meas {
+    flex: 1 1 100%;
+    font-weight: 400 !important;
+
+    & .bd-mhead {
+        color: var(--text-muted);
+        font-size: 0.9em;
+        margin-bottom: 0.2em;
+    }
+
+    & .bd-mv {
+        display: flex;
+        align-items: baseline;
+        gap: 0.6em;
+        padding: 0.2em 0;
+        border-top: 1px solid var(--border);
+
+        & .bd-mv-ch {
+            flex: none;
+            min-width: 2.2em;
+            font-size: 0.8em;
+            color: var(--text-faint);
+            font-variant-numeric: tabular-nums;
+        }
+
+        & .bd-mv-name {
+            color: var(--text-muted);
+            flex: 1 1 auto;
+        }
+
+        & b {
+            margin-left: auto;
+            font-variant-numeric: tabular-nums;
+            text-align: right;
+            white-space: nowrap;
+        }
+
+        &.bd-mv-alarm b {
+            color: var(--danger);
+        }
+    }
+}
+
+.bd-time-lost {
+    color: var(--danger);
+    font-weight: 700;
+}
+
+/* Meldungen (Info, letzter Fehler) */
+.bd-messages {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3em;
+    font-size: 0.88em;
+    color: var(--text-muted);
+    background-color: transparent;
+    box-shadow: none;
+    border-style: dashed;
+
+    & i {
+        margin-right: 0.3em;
+    }
+
+    & #blxCmdRes {
+        color: var(--danger);
+    }
+}
+
+/* Setup-Dialog */
+.bd-setup {
+    width: min(30em, 100%);
+
+    & section {
+        padding: 0.2em 0 0.8em 0;
+
+        &+section {
+            border-top: 1px solid var(--border);
+            padding-top: 0.8em;
+        }
+    }
+
+    & h3 {
+        font-size: 0.75em;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: var(--text-faint);
+        margin: 0 0 0.6em 0;
+    }
+
+    & .bd-form-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1em;
+        min-height: 2.4em;
+
+        & select {
+            min-width: 10em;
+        }
+    }
+
+    & .bd-form-col {
+        display: flex;
+        flex-direction: column;
+        gap: 0.3em;
+        margin-bottom: 0.7em;
+
+        & label {
+            font-size: 0.9em;
+            font-weight: 500;
+        }
+    }
+
+    & .bd-inline {
+        display: flex;
+        gap: 0.5em;
+
+        & input {
+            flex: 1;
+            min-width: 0;
+        }
+    }
+
+    & .bd-setup-info {
+        font-size: 0.85em;
+        color: var(--text-muted);
+        display: flex;
+        flex-direction: column;
+        gap: 0.3em;
+    }
+}
+
+/* Tabelle (Dateien eines Geraets) */
+.bd-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.92em;
+
+    & th {
+        font-size: 0.78em;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        color: var(--text-faint);
+        text-align: left;
+        padding: 0.4em 0.6em;
+        border-bottom: 1px solid var(--border);
+    }
+
+    & td {
+        padding: 0.45em 0.6em;
+        border-bottom: 1px solid var(--border);
+        vertical-align: middle;
+    }
+
+    & .bd-num {
+        text-align: right;
+        font-variant-numeric: tabular-nums;
+    }
+
+    & tr.bd-pending td:first-child {
+        box-shadow: inset 3px 0 0 var(--warn);
+    }
+
+    & button {
+        min-height: 0;
+        padding: 0.25em 0.5em;
+    }
+}
+
+.bd-devhead {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(9em, 1fr));
+    gap: 0.6em 1em;
+    margin-bottom: 1em;
+}
+
+.bd-tag-warn {
+    display: inline-block;
+    font-size: 0.75em;
+    font-weight: 600;
+    color: var(--warn);
+    background-color: var(--warn-soft);
+    border-radius: 999px;
+    padding: 0.05em 0.55em;
+}
+
+/* ===================== 6. Terminal und Grafik ===================== */
+/* blx.js baut das Terminal mit Inline-Styles, daher hier teils !important */
+#blxTerminal {
+    background-color: #0d1117;
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    margin-bottom: 1em;
+}
+
+#blxTerminalOut {
+    border: none !important;
+    margin: 0 !important;
+    overflow: auto !important;
+    max-height: 45vh;
+    min-height: 6em;
+    padding: 0.8em 1em;
+    color: #d5dde6;
+    font-family: var(--mono);
+    font-size: 0.85em;
+    line-height: 1.5;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    scrollbar-color: #3a4654 transparent;
+}
+
+#blxTerminal>div:last-child {
+    gap: 0.5em;
+    padding: 0.5em;
+    background-color: #161b22;
+    border-top: 1px solid #262e38;
+}
+
+#blxTerminalCmd {
+    margin: 0 !important;
+    font-family: var(--mono);
+    background-color: #0d1117;
+    color: #e6edf3;
+    border-color: #30363d;
+
+    &:hover:not(:disabled) {
+        border-color: #4a5563;
+    }
+}
+
+#blxTerminalSend {
+    background-color: var(--accent);
+    border-color: var(--accent);
+    color: #ffffff;
+    min-width: 2.6em;
+}
+
+/* ===================== 7. Parameter-Editoren (params.js) ===================== */
+.pf-editor {
+    white-space: normal;
+    width: min(62em, 84vw);
+    box-sizing: border-box;
+    container-type: inline-size;
+
+    @media (max-width: 600px) {
+        width: auto;
+    }
+
+    & input:disabled {
+        background-color: var(--surface-2);
+        color: var(--text-faint);
+    }
+}
+
+/* Gruppe von Feldern als Karte, Titel innen */
 .pf-group {
-    border: 1px solid var(--silvergray69);
-    border-radius: 0.4em;
-    margin: 0 0 0.8em 0;
-    padding: 0.3em 0.8em 0.8em 0.8em;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background-color: var(--surface);
+    margin: 0 0 1em 0;
+    padding: 0.9em 1em 1em 1em;
+    min-width: 0;
 
     & legend {
-        font-weight: 700;
-        padding: 0 0.3em;
+        float: left;
+        width: 100%;
+        padding: 0;
+        margin-bottom: 0.8em;
+        font-weight: 650;
+        font-size: 0.95em;
+    }
+
+    & legend+* {
+        clear: both;
     }
 }
 
 .pf-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(14em, 1fr));
-    gap: 0.6em 1em;
+    gap: 0.9em 1.2em;
 }
 
 .pf-field {
@@ -607,267 +1653,867 @@ dialog {
     & > label {
         font-size: 0.85em;
         font-weight: 600;
-        margin-bottom: 0.15em;
+        margin-bottom: 0.3em;
     }
 
     & > input,
     & > select {
         width: 100%;
-        box-sizing: border-box;
     }
 }
 
 .pf-unit {
     font-weight: 400;
-    color: var(--midgray50);
+    color: var(--text-faint);
 }
 
 .pf-hint {
-    font-size: 0.75em;
-    color: var(--midgray50);
+    font-size: 0.76em;
+    color: var(--text-muted);
     min-height: 1.1em;
+    margin-top: 0.25em;
 }
 
 .pf-hint.pf-err {
-    color: var(--red);
+    color: var(--danger);
 }
 
+input.pf-invalid,
+select.pf-invalid,
 .pf-invalid {
-    border-color: var(--red);
-    outline: 0.15em solid var(--red);
+    border-color: var(--danger);
+    box-shadow: var(--ring-danger);
 }
 
 .pf-bits {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.2em 0.8em;
+    gap: 0.3em 0.9em;
     font-size: 0.85em;
-    margin-top: 0.25em;
+    margin-top: 0.4em;
 }
 
 .pf-bit {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35em;
     white-space: nowrap;
 
-    & input[type=checkbox] {
-        margin-right: 0.25em;
+    & select {
+        min-height: 1.9em;
+        padding-top: 0.15em;
+        padding-bottom: 0.15em;
     }
 }
 
-.pf-chan-head {
+/* Kopfzeile: erweiterte Einstellungen, Hinweise, Aenderungen */
+.pf-toolbar {
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 0.5em;
+    gap: 0.5em 1em;
+    margin-bottom: 0.8em;
+    font-size: 0.88em;
+    white-space: normal;
+
+    & button {
+        min-height: 2em;
+        padding: 0.25em 0.65em;
+    }
+}
+
+.pf-adv-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55em;
+    cursor: pointer;
+    user-select: none;
+}
+
+.pf-changes {
+    color: var(--text-faint);
+}
+
+.pf-changes.pf-has-changes {
+    color: var(--accent);
+    background-color: var(--accent-soft);
+    border-radius: 999px;
+    padding: 0.2em 0.7em;
     font-weight: 600;
 }
 
-.pf-table-wrap {
-    overflow-x: auto;
+.pf-tb-right {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4em 0.6em;
 }
 
+/* Anzahl Warnungen, Klick springt zur ersten */
+button.pf-warns {
+    color: var(--warn);
+    background-color: var(--warn-soft);
+    border-color: transparent;
+    border-radius: 999px;
+    box-shadow: none;
+    font-weight: 600;
+
+    &:hover:not(:disabled) {
+        background-color: var(--warn-soft);
+        border-color: var(--warn);
+    }
+}
+
+/* Kurzueberblick ueber dem Editor */
+.pf-summary {
+    font-size: 0.88em;
+    background-color: var(--accent-soft);
+    color: var(--text);
+    border-radius: var(--radius);
+    padding: 0.55em 0.85em;
+    margin-bottom: 0.8em;
+    white-space: normal;
+
+    & i {
+        color: var(--accent);
+        margin-right: 0.2em;
+    }
+}
+
+/* Plausibilitaet: Warnung blockiert nicht (orange), Fehler schon (rot) */
+.pf-hint .pf-wtxt {
+    color: var(--warn);
+    font-weight: 600;
+}
+
+.pf-wicon {
+    color: var(--warn);
+    margin-left: 0.35em;
+    cursor: help;
+}
+
+/* Geaendertes Feld: vorheriger Wert und Zuruecksetzen */
+.pf-was {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.2em 0.5em;
+    font-size: 0.76em;
+    color: var(--text-muted);
+    margin-top: 0.15em;
+
+    & .pf-reset {
+        font-size: 1em;
+        min-height: 0;
+        padding: 0.05em 0.5em;
+        border-radius: 999px;
+        color: var(--accent);
+        background-color: var(--accent-soft);
+        border-color: transparent;
+        box-shadow: none;
+    }
+}
+
+.pf-good {
+    color: var(--success);
+}
+
+.pf-bad {
+    color: var(--danger);
+    font-weight: 600;
+}
+
+/* Rohwert plus Auswahl gaengiger Werte */
+.pf-field > .pf-pre {
+    display: flex;
+    gap: 0.4em;
+
+    & input {
+        flex: 1;
+        min-width: 0;
+    }
+
+    & select {
+        max-width: 8.5em;
+    }
+}
+
+/* ---- Kanalliste ---- */
+.pf-chan-head {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.4em 1em;
+    margin-bottom: 0.7em;
+
+    & .pf-chan-count {
+        color: var(--text-muted);
+        font-size: 0.9em;
+
+        & b {
+            color: var(--text);
+        }
+    }
+
+    & button {
+        min-height: 1.9em;
+        padding: 0.2em 0.6em;
+        font-size: 0.88em;
+    }
+}
+
+/* Tabelle in Karte mit runden Ecken. overflow: clip statt hidden, damit der Kopf (sticky) weiter haftet */
+.pf-table-wrap {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background-color: var(--surface);
+    overflow: clip;
+    box-shadow: var(--shadow-sm);
+}
+
+/* Zeilen luftig, nur feine Trennlinien; Sensor-Gruppe (Messkanal + Cache-Kanaele) durch kraeftigere Linie
+   getrennt, Cache-Kanaele eingerueckt. Eingaben als gefuellte Felder ohne Rahmen. */
 .pf-table {
-    border-collapse: collapse;
+    border-collapse: separate;
+    border-spacing: 0;
     width: 100%;
 
+    & thead {
+        position: sticky;
+        top: -1em; /* Innenabstand von .jo-dialog-big */
+        z-index: 2;
+    }
+
     & th {
-        font-size: 0.8em;
+        font-size: 0.72em;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: var(--text-muted);
         text-align: left;
-        padding: 0.2em 0.3em;
-        border-bottom: 2px solid var(--silvergray69);
+        padding: 0.75em 0.5em;
+        border-bottom: 1px solid var(--border);
         white-space: nowrap;
+        background-color: var(--surface-2);
     }
 
     & td {
-        padding: 0.25em 0.3em;
-        vertical-align: top;
+        padding: 0.45em 0.5em;
+        vertical-align: middle;
     }
 
-    & tbody {
-        border-bottom: 1px solid var(--lightgray88);
+    & .pf-row > td {
+        border-top: 1px solid var(--border);
+        background-color: var(--surface);
+        transition: background-color 0.1s;
     }
 
+    & tbody:first-of-type > .pf-row > td {
+        border-top: none;
+    }
+
+    & .pf-chan-meas:not(:first-of-type) > .pf-row > td {
+        border-top-color: var(--border-strong);
+    }
+
+    & .pf-row:hover > td,
+    & .pf-open > .pf-row > td {
+        background-color: var(--surface-2);
+    }
+
+    & .pf-c-tog {
+        width: 2em;
+        padding-left: 0.4em;
+        padding-right: 0;
+    }
+
+    & .pf-c-no {
+        width: 4.5em;
+        white-space: nowrap;
+        cursor: pointer;
+    }
+
+    & .pf-c-sdi,
+    & .pf-c-idx {
+        width: 4em;
+    }
+
+    & .pf-c-unit {
+        width: 7.5em;
+    }
+
+    & .pf-c-sum {
+        width: 100%;
+        white-space: normal;
+    }
+
+    & .pf-c-rm {
+        width: 2.4em;
+        text-align: right;
+        padding-right: 0.5em;
+    }
+
+    /* Eingaben in der Zeile: gefuellt, Rahmen erst beim Zeigen/Fokus */
     & .pf-cell {
-        width: 6em;
+        background-color: var(--surface-2);
+        border-color: transparent;
+        min-height: 2em;
+        padding: 0.3em 0.45em;
+    }
+
+    & .pf-row:hover .pf-cell,
+    & .pf-open .pf-cell {
+        background-color: var(--surface);
+        border-color: var(--border);
+    }
+
+    & .pf-cell:focus {
+        background-color: var(--surface);
+        border-color: var(--accent);
+    }
+
+    & .pf-cell.pf-invalid {
+        border-color: var(--danger);
     }
 
     & .pf-cell-s {
         width: 3em;
+        text-align: center;
+    }
+
+    & .pf-cell-u {
+        width: 7em;
     }
 
     & .pf-detail > td {
-        background-color: var(--whitegray94);
-        padding: 0.6em;
+        padding: 0 0.6em 0.8em 2.6em;
+        background-color: var(--surface-2);
     }
 }
 
-.pf-chno {
+/* Kanalnummer als kleines Schild, Cache-Kanaele eingerueckt mit Pfeil */
+.pf-no {
+    display: inline-block;
+    min-width: 1.7em;
+    text-align: center;
+    font-weight: 650;
+    font-variant-numeric: tabular-nums;
+    border-radius: 6px;
+    padding: 0.1em 0.3em;
+    background-color: var(--surface-3);
+    color: var(--text);
+    box-sizing: border-box;
+}
+
+.pf-chan-cache .pf-no {
+    background-color: transparent;
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+.pf-open > .pf-row .pf-no {
+    background-color: var(--accent);
+    color: var(--on-accent);
+}
+
+.pf-sub {
+    color: var(--text-faint);
+    margin: 0 0.15em 0 0.35em;
+}
+
+/* Aufklappen: Pfeil dreht sich */
+button.pf-toggle {
+    min-height: 0;
+    width: 1.9em;
+    height: 1.9em;
+    padding: 0;
+    border: none;
+    border-radius: 6px;
+    background: none;
+    box-shadow: none;
+    color: var(--text-faint);
+
+    &:hover:not(:disabled) {
+        background-color: var(--surface-3);
+        color: var(--text);
+    }
+
+    & i {
+        display: inline-block;
+        transition: transform 0.15s;
+    }
+}
+
+.pf-open .pf-toggle i {
+    transform: rotate(90deg);
+}
+
+/* Entfernen: unauffaellig, rot erst beim Zeigen */
+button.pf-remove {
+    min-height: 0;
+    width: 1.9em;
+    height: 1.9em;
+    padding: 0;
+    border: none;
+    border-radius: 6px;
+    background: none;
+    box-shadow: none;
+    color: var(--text-faint);
+    opacity: 0.6;
+
+    &:not(:disabled):hover {
+        color: var(--danger);
+        background-color: var(--danger-soft);
+        opacity: 1;
+    }
+
+    &:disabled {
+        opacity: 0.25;
+    }
+}
+
+.pf-row:hover button.pf-remove:not(:disabled),
+.pf-row:focus-within button.pf-remove:not(:disabled) {
+    opacity: 1;
+}
+
+/* SDI-Adresse bei Cache: Adresse des Sensors davor, nur Anzeige */
+.pf-ro-cell {
+    display: inline-block;
+    width: 3em;
+    text-align: center;
+    color: var(--text-faint);
+    box-sizing: border-box;
+    cursor: default;
+}
+
+.pf-newtag {
+    display: inline-block;
+    font-size: 0.68em;
     font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--accent);
+    background-color: var(--accent-soft);
+    border-radius: 999px;
+    padding: 0.1em 0.5em;
+    margin-left: 0.35em;
+    vertical-align: 0.15em;
 }
 
-.pf-inactive > td {
-    color: var(--midgray50);
+/* Umschalter Messen/Cache: beide Seiten beschriftet, aktive Seite in Modusfarbe (Messen blau, Cache orange) */
+.pf-seg {
+    display: inline-flex;
+    gap: 2px;
+    padding: 2px;
+    border-radius: 8px;
+    background-color: var(--surface-3);
+    white-space: nowrap;
+
+    & label {
+        cursor: pointer;
+    }
+
+    & input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+        position: absolute;
+    }
+
+    & span {
+        display: inline-block;
+        padding: 0.22em 0.7em;
+        font-size: 0.85em;
+        font-weight: 500;
+        border-radius: 6px;
+        color: var(--text-muted);
+        transition: background-color 0.12s, color 0.12s;
+    }
+
+    & label:hover span {
+        color: var(--text);
+    }
+
+    & input:checked + span {
+        font-weight: 650;
+        background-color: var(--surface);
+        box-shadow: var(--shadow-sm);
+    }
+
+    & input[value="0"]:checked + span {
+        color: var(--mode-meas);
+    }
+
+    & input[value="1"]:checked + span {
+        color: var(--mode-cache);
+    }
+
+    & input:focus-visible + span {
+        box-shadow: var(--ring);
+    }
 }
 
-.pf-toggle,
-.pf-remove {
-    min-width: 2em;
+/* Erweiterte Einstellungen (Service): nur sichtbar mit Haken 'pf-show-adv' */
+.pf-editor:not(.pf-show-adv) .pf-adv {
+    display: none;
 }
 
-.pf-remove:not(:disabled) {
-    color: var(--red);
+.pf-subhead {
+    font-size: 0.72em;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-faint);
+    margin: 1em 0 0.6em 0;
+    border-top: 1px solid var(--border);
+    padding-top: 0.8em;
+}
+
+.pf-detail .pf-grid {
+    background-color: transparent;
 }
 
 .pf-note {
-    font-size: 0.8em;
-    color: var(--midgray50);
-    margin-top: 0.5em;
+    font-size: 0.82em;
+    color: var(--text-muted);
+    margin-top: 0.7em;
 }
 
-/* Hauptseite (index.html/blxdash.js): Status-Karte, Geraete-Info, Aktions-Karten.
-   Nur Grau-Variablen fuer Flaechen, damit dashToggleTheme() (Invertierung) passt. */
-.bd-card,
-.bd-status,
-.bd-action {
+/* Kurzinfos in der Uebersicht */
+.pf-chip {
+    display: inline-block;
+    font-size: 0.78em;
+    border-radius: 999px;
+    padding: 0.12em 0.6em;
+    margin: 0.1em 0.1em 0.1em 0;
+    white-space: nowrap;
+    color: var(--text-muted);
+    background-color: var(--surface-3);
+}
+
+.pf-chip-warn {
+    color: var(--warn);
+    background-color: var(--warn-soft);
     white-space: normal;
-    background-color: var(--whitegray94);
-    border: 1px solid var(--infogray82);
-    border-radius: 0.5em;
-    padding: 0.7em 0.8em;
-    margin-bottom: 0.7em;
+
+    &::before {
+        content: '\26A0\FE0E  ';
+    }
 }
 
-.bd-status {
+.pf-chan-foot {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5em;
+    margin-top: 0.8em;
+
+    & button {
+        border-style: dashed;
+        background-color: transparent;
+        box-shadow: none;
+        color: var(--accent);
+
+        &:hover:not(:disabled) {
+            background-color: var(--accent-soft);
+            border-color: var(--accent);
+        }
+    }
+}
+
+/* Schmaler Editor (Handy, Tablet hochkant): jede Kanalzeile als Karte, Spaltennamen ueber den Feldern
+   (data-label), kein seitliches Scrollen. Zeile 1: Nummer, Modus, Entfernen; Zeile 2: Adresse, Index,
+   Einheit; Zeile 3: Uebersicht (nur wenn vorhanden) */
+@container (max-width: 720px) {
+    .pf-btxt {
+        display: none;
+    }
+
+    .pf-seg span {
+        padding: 0.22em 0.55em;
+    }
+
+    .pf-table-wrap {
+        border: none;
+        background: none;
+        box-shadow: none;
+        overflow: visible;
+    }
+
+    .pf-table {
+        display: block;
+
+        & thead {
+            display: none;
+        }
+
+        & tbody {
+            display: block;
+            background-color: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            margin-bottom: 0.5em;
+            overflow: clip;
+        }
+
+        & tbody.pf-chan-cache {
+            margin-left: 1.2em;
+        }
+
+        & .pf-row {
+            display: grid;
+            grid-template-columns: 2em 5em 5em 1fr 2.4em;
+            grid-template-areas:
+                "tog no mode mode rm"
+                "tog sdi idx unit unit"
+                "tog sum sum sum sum";
+            align-items: end;
+            padding: 0.3em 0;
+        }
+
+        & .pf-open > .pf-row,
+        & .pf-row:hover {
+            background-color: var(--surface-2);
+        }
+
+        & .pf-row > td,
+        & .pf-row:hover > td,
+        & .pf-open > .pf-row > td,
+        & .pf-chan-meas:not(:first-of-type) > .pf-row > td {
+            display: block;
+            width: auto;
+            border: none;
+            background: none;
+            padding: 0.2em 0.3em;
+        }
+
+        & .pf-row > .pf-c-tog {
+            grid-area: tog;
+            align-self: start;
+            padding: 0.3em 0 0 0.2em;
+        }
+
+        & .pf-c-no {
+            grid-area: no;
+            align-self: center;
+        }
+
+        & .pf-c-mode {
+            grid-area: mode;
+        }
+
+        & .pf-c-sdi {
+            grid-area: sdi;
+        }
+
+        & .pf-c-idx {
+            grid-area: idx;
+        }
+
+        & .pf-c-unit {
+            grid-area: unit;
+        }
+
+        & .pf-row > .pf-c-sum {
+            grid-area: sum;
+            padding-bottom: 0.3em;
+        }
+
+        & .pf-c-sum:not(:has(.pf-chip)) {
+            display: none;
+        }
+
+        & .pf-row > .pf-c-rm {
+            grid-area: rm;
+            align-self: center;
+        }
+
+        & td[data-label]::before {
+            content: attr(data-label);
+            display: block;
+            font-size: 0.72em;
+            font-weight: 600;
+            color: var(--text-faint);
+            margin-bottom: 0.15em;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        & .pf-cell-u {
+            width: 100%;
+        }
+
+        & .pf-row .pf-cell {
+            background-color: var(--surface-2);
+            border-color: transparent;
+        }
+
+        & .pf-open .pf-cell,
+        & .pf-row:hover .pf-cell {
+            background-color: var(--surface);
+            border-color: var(--border);
+        }
+
+        & .pf-ro-cell {
+            line-height: 2em;
+        }
+
+        & .pf-detail,
+        & .pf-detail > td {
+            display: block;
+        }
+
+        & .pf-detail > td {
+            padding: 0.4em 0.8em 0.8em 0.8em;
+            border-top: 1px solid var(--border);
+        }
+    }
+}
+
+/* Bestaetigung der Aenderungen vor dem Senden */
+.pf-confirm {
+    white-space: normal;
+    text-align: left;
+    max-height: 55vh;
+    overflow: auto;
+    font-size: 0.92em;
+
+    & > div {
+        margin-bottom: 0.8em;
+    }
+}
+
+.pf-cf-dev {
     display: flex;
     align-items: center;
-    gap: 0.8em;
-    flex-wrap: wrap;
-    border-left: 0.4em solid var(--midgray50);
+    gap: 0.5em;
+    background-color: var(--surface-2);
+    border-radius: 8px;
+    padding: 0.5em 0.75em;
 
-    &>i {
-        font-size: 2em;
-        color: var(--midgray50);
-    }
-
-    &.bd-status-busy {
-        border-left-color: var(--orange);
-
-        &>i {
-            color: var(--orange);
-        }
-    }
-
-    &.bd-status-pin {
-        border-left-color: var(--orange);
-
-        &>i {
-            color: var(--orange);
-        }
-    }
-
-    &.bd-status-on {
-        border-left-color: var(--green);
-
-        &>i {
-            color: var(--green);
-        }
-    }
-
-    & .bd-status-text {
-        display: flex;
-        flex-direction: column;
-        flex: 1 1 12em;
-        gap: 0.2em;
+    & i {
+        color: var(--text-muted);
     }
 }
 
-.bd-hint {
-    font-size: 0.85em;
-    color: var(--lowmidgray38);
+.pf-cf-warn {
+    background-color: var(--warn-soft);
+    border-radius: 8px;
+    padding: 0.55em 0.8em;
+    line-height: 1.5;
+
+    & b {
+        color: var(--warn);
+    }
 }
 
-.bd-info-grid {
-    display: grid;
-    grid-template-columns: max-content 1fr;
-    gap: 0.25em 1em;
-    margin-bottom: 0.5em;
+.pf-cf-tab {
+    width: 100%;
+    border-collapse: collapse;
 
-    &>span:nth-child(odd) {
-        color: var(--lowmidgray38);
+    & th {
+        font-size: 0.78em;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        color: var(--text-faint);
     }
 
-    &>*:nth-child(even) {
+    & th,
+    & td {
+        text-align: left;
+        padding: 0.35em 0.8em 0.35em 0;
+        border-bottom: 1px solid var(--border);
+        vertical-align: top;
         overflow-wrap: anywhere;
     }
+
+    & td:nth-child(2) {
+        color: var(--text-muted);
+        text-decoration: line-through;
+        text-decoration-color: var(--text-faint);
+    }
 }
 
-.bd-check {
-    cursor: pointer;
+/* Roh-Editor iparam (Service): Zeilennummer, Mnemonic, Rohwert, Klartext */
+.ce-head {
+    font-weight: 650;
+    font-size: 0.95em;
+    margin: 1.2em 0 0.4em 0;
+    padding-bottom: 0.3em;
+    border-bottom: 1px solid var(--border-strong);
+
+    &:first-child {
+        margin-top: 0;
+    }
 }
 
-.bd-attention {
-    border-color: var(--orange);
-    border-width: 2px;
-}
-
-.bd-row {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 0.4em;
-    margin-top: 0.4em;
-}
-
-/* Aktionen: 1 Spalte auf Mobiles, mehrere auf breiten Bildschirmen */
-.bd-actions {
+.ce-row {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(min(100%, 18em), 1fr));
-    gap: 0.7em;
-    margin-bottom: 0.7em;
+    grid-template-columns: 2.5em 1.6em minmax(8em, 14em) 1fr;
+    gap: 0.6em;
+    align-items: center;
+    padding: 0.2em 0;
 
-    & .bd-action {
-        margin-bottom: 0;
+    & .ce-idx {
+        font-size: 0.75em;
+        color: var(--text-faint);
+        text-align: right;
+        font-variant-numeric: tabular-nums;
+    }
 
-        &>*+* {
-            margin-top: 0.4em;
+    & .ce-mn {
+        font-size: 0.85em;
+        text-align: center;
+        background-color: var(--surface-3);
+        border-radius: 4px;
+        padding: 0.05em 0;
+    }
+
+    & .ce-lab {
+        font-size: 0.85em;
+        min-width: 0;
+
+        & small {
+            display: block;
+            color: var(--text-muted);
+            overflow-wrap: anywhere;
         }
+    }
+}
 
-        &>button,
-        &>.bd-row>button {
-            padding: 0.4em 0.7em;
+@media (max-width: 600px) {
+    .ce-row {
+        grid-template-columns: 2em 1.4em 1fr;
+
+        & .ce-lab {
+            grid-column: 3;
         }
     }
 }
 
-.bd-actions button,
-.bd-status button,
-.bd-card button {
-    min-height: 2.2em;
-}
+/* Service-Auswahl */
+.pf-svc {
+    white-space: normal;
+    max-width: 32em;
+    font-size: 0.92em;
 
-button.bd-primary:not(:disabled) {
-    background-color: var(--bleblue);
-    border-color: var(--bleblue);
-    color: #ffffff;
-
-    &:hover {
-        filter: brightness(1.15);
+    & p {
+        margin: 0 0 0.6em 0;
     }
 }
 
-button.bd-danger:not(:disabled) {
-    color: var(--red);
-    border-color: var(--red);
-}
-
-button.bd-small {
-    font-size: 0.85em;
-    min-height: auto;
-}
-
-.bd-messages {
-    font-size: 0.9em;
-
-    & #blxCmdRes {
-        color: var(--red);
-    }
+.pf-svc-warn {
+    display: flex;
+    align-items: center;
+    gap: 0.6em;
+    color: var(--warn);
+    background-color: var(--warn-soft);
+    border-radius: 8px;
+    padding: 0.6em 0.8em;
+    font-weight: 650;
+    margin-bottom: 0.9em;
 }

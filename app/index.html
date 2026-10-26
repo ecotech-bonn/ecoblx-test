@@ -23,7 +23,7 @@ Ein Dashboard fuer LTX Data Logger als PWA
     <meta property="og:image" content="https://joembedded.github.io/ltx_ble_demo/ble_api/static/preview512.png" />
 
     <link rel="manifest" href="manifest.webmanifest">
-    <meta name="theme-color" content="#0000FF">
+    <meta name="theme-color" content="#10253d">
     <!-- - App Icon entweder als Icon or SVG: -->
     <link rel="icon" type="image/svg+xml" href="./static/favicon.svg">
     <link rel="icon" type="image/x-icon" href="./static/favicon.ico">
@@ -66,7 +66,7 @@ Ein Dashboard fuer LTX Data Logger als PWA
     <!-- Nun erst Hauptscript -->
     <script src="./js/blxdash.js" defer type="module"></script>
 
-    <title>BlxDashboard</title>
+    <title>ecoBLX</title>
 </head>
 
 <body>
@@ -79,10 +79,8 @@ Ein Dashboard fuer LTX Data Logger als PWA
                     <i class="bi-caret-right-fill"></i>
                 </span>
             </span>
-            &nbsp;&nbsp;
-            <!-- Headerzeile - mit Test fuer die Internationalisierung (intmain_i18n.js) -->
-            <span>BlxDashboard</span> &nbsp;&nbsp;<span class="jo-font-small"> <i class="bi bi-github">-Version</i>
-            </span>
+            <!-- Name + Version (bd-version wird von blxdash.js gefuellt) -->
+            <span class="jo-brand"><b>eco<span>BLX</span></b> <span id="bd-version" class="jo-version">x.xx xx.xx.xxxx</span></span>
 
             <!-- Positionerung rechts ims Menue, das selbe geht auch im Footer  -->
             <span class="jo-menu-right">
@@ -138,7 +136,6 @@ Ein Dashboard fuer LTX Data Logger als PWA
                     <div id="sidebutton-setup" class="jo-sibu">
                         <i class="bi-gear"></i>
                         <span data-ll="Setup">Setup</span>
-                        <span>&nbsp;/&nbsp;<i class="bi-info-circle"></i></span>
                     </div>
 
                     <div data-ll="Devices" class="jo-sinavinfo">Devices</div>
@@ -151,8 +148,8 @@ Ein Dashboard fuer LTX Data Logger als PWA
                         <span class="jo-badge-span">&utrif;0/0</span>
                     </div>
 
-                    <div id="sidebutton-qrscan" class="jo-sibu green">
-                        <i class="bi-qr-code jo-icon-back-white"></i>
+                    <div id="sidebutton-qrscan" class="jo-sibu">
+                        <i class="bi-qr-code-scan"></i>
                         <span data-ll="Scan">Scan</span>
                     </div>
 
@@ -176,10 +173,6 @@ Ein Dashboard fuer LTX Data Logger als PWA
                 <main class="jo-content">
 
                     <div id="section_main" class="jo-user-section">
-                        <div><b data-ll="Main Content">Main Content</b> <i class="bi-house"></i>
-                            <hr>
-                        </div>
-
                         <!-- BLX Elemente fuer Haupseite START -->
                         <!-- Status-Karte: Verbindungszustand + naechster Schritt (gefuellt von bdUpdateStatus()) -->
                         <div id="blxStatusCard" class="bd-status bd-status-off">
@@ -193,25 +186,6 @@ Ein Dashboard fuer LTX Data Logger als PWA
                             </button>
                         </div>
 
-                        <!-- Geraeteinfo -->
-                        <div class="bd-card">
-                            <div class="bd-info-grid">
-                                <span data-ll="Name">Name</span><b id="blxDeviceName">-</b>
-                                <span>MAC</span><span id="blxMAC">-</span>
-                                <span data-ll="Type">Type</span><span id="blxType">-</span>
-                                <span>Firmware</span><span>V<span id="blxFW">-</span></span>
-                            </div>
-                            <label class="bd-check" data-llt="Pitch shows the radio signal strength (helps to find the logger)">
-                                <input disabled type="checkbox" id="blxEcholot">
-                                <i class="bi-music-note"></i> <span data-ll="Signal tone">Signal tone</span>
-                            </label>
-                        </div>
-
-                        <div id="blxBadge" class="bd-card" style="display:none">
-                            <!-- print Badge only for Factory Setup-->
-                            <button disabled id="blxBadgeButton"><i class="bi-printer"></i> Print Badge</button>
-                        </div>
-
                         <!-- PIN-Eingabe, nur sichtbar wenn Geraet eine PIN verlangt -->
                         <div id="blxPinEnter" class="bd-card bd-attention" style="display:none">
                             <div><i class="bi-shield-lock"></i> <b data-ll="PIN required">PIN required</b></div>
@@ -222,10 +196,29 @@ Ein Dashboard fuer LTX Data Logger als PWA
                                     placeholder="PIN">
                                 <button id="blxSetPinButton" class="bd-primary"><i class="bi-unlock"></i>
                                     <span data-ll="Set PIN">Set PIN</span></button>
-                                <button id="blxScanPinButton" class="green">
-                                    <i class="bi-qr-code"></i> <span data-ll="Scan">Scan</span>
+                                <button id="blxScanPinButton">
+                                    <i class="bi-qr-code-scan"></i> <span data-ll="Scan">Scan</span>
                                 </button>
                             </div>
+                        </div>
+
+                        <!-- Geraeteinfo: Kennwerte nebeneinander -->
+                        <div class="bd-card bd-device">
+                            <div class="bd-info-grid">
+                                <div class="bd-kv"><span data-ll="Name">Name</span><b id="blxDeviceName">-</b></div>
+                                <div class="bd-kv"><span>MAC</span><span id="blxMAC" class="bd-mono">-</span></div>
+                                <div class="bd-kv"><span data-ll="Type">Type</span><span id="blxType">-</span></div>
+                                <div class="bd-kv"><span>Firmware</span><span>V<span id="blxFW">-</span></span></div>
+                            </div>
+                            <label class="bd-check" data-llt="Pitch shows the radio signal strength (helps to find the logger)">
+                                <input disabled type="checkbox" id="blxEcholot" class="jo-switch">
+                                <i class="bi-music-note-beamed"></i> <span data-ll="Signal tone">Signal tone</span>
+                            </label>
+                        </div>
+
+                        <div id="blxBadge" class="bd-card" style="display:none">
+                            <!-- print Badge only for Factory Setup-->
+                            <button disabled id="blxBadgeButton"><i class="bi-printer"></i> Print Badge</button>
                         </div>
 
                         <!-- Aktionen als Karten: Knopf + kurze Erklaerung + Ergebnis.
@@ -237,7 +230,8 @@ Ein Dashboard fuer LTX Data Logger als PWA
                                     <span data-ll="Measure">Measure</span></button>
                                 <div class="bd-hint" data-ll="Starts a single measurement and shows the current values.">
                                     Starts a single measurement and shows the current values.</div>
-                                <div><span data-ll="Values">Values</span>: <span id="blxMeasureData">-</span></div>
+                                <div class="bd-result"><span class="bd-result-label" data-ll="Values">Values</span>
+                                    <div id="blxMeasureData" class="bd-meas">-</div></div>
                             </div>
 
                             <!-- RAW for Sensors Special Data (e.g. Radar-Raw)-->
@@ -258,12 +252,12 @@ Ein Dashboard fuer LTX Data Logger als PWA
 
                             <!-- Internet-Uebertragung: sendet 'i1' (bzw. '.lines 200' + 'i129'), nur Logger mit Modem -->
                             <div id="blxInetSpan" class="bd-action" style="display:none">
-                                <button disabled id="blxInetButton"><i class="bi-cloud-upload"></i>
+                                <button disabled id="blxInetButton"><i class="bi-cloud-arrow-up"></i>
                                     <span data-ll="Start Internet Transfer">Start Internet Transfer</span></button>
                                 <div class="bd-hint" data-ll="Logger sends its data now to the server (mobile network or LoRaWAN). Progress in the terminal.">
                                     Logger sends its data now to the server (mobile network or LoRaWAN). Progress in the terminal.</div>
                                 <label id="blxInetDiagLabel" class="bd-check bd-hint" data-llt="Verbose output with modem commands (i129). Contains server and device details!">
-                                    <input disabled type="checkbox" id="blxInetDiag">
+                                    <input disabled type="checkbox" id="blxInetDiag" class="jo-switch">
                                     <span data-ll="Detailed diagnostic log">Detailed diagnostic log</span>
                                 </label>
                             </div>
@@ -273,15 +267,17 @@ Ein Dashboard fuer LTX Data Logger als PWA
                                     <span data-ll="Memory Info">Memory Info</span></button>
                                 <div class="bd-hint" data-ll="Shows how much of the logger memory is used.">
                                     Shows how much of the logger memory is used.</div>
-                                <div><span data-ll="Memory">Memory</span>: <span id="blxMemory">-</span></div>
+                                <div class="bd-result"><span class="bd-result-label" data-ll="Memory">Memory</span>
+                                    <span id="blxMemory">-</span></div>
                             </div>
 
                             <div id="blxSyncButtonSpan" class="bd-action" style="display:none">
-                                <button disabled id="blxSyncButton"><i class="bi-clock"></i>
+                                <button disabled id="blxSyncButton"><i class="bi-clock-history"></i>
                                     <span data-ll="Synchronize Time">Synchronize Time</span></button>
                                 <div class="bd-hint" data-ll="Sets the logger clock to the time of this device.">
                                     Sets the logger clock to the time of this device.</div>
-                                <div><span data-ll="Time deviation">Time deviation</span>: <span id="blxSync">-</span></div>
+                                <div class="bd-result"><span class="bd-result-label" data-ll="Time deviation">Time deviation</span>
+                                    <span id="blxSync">-</span></div>
                             </div>
 
                             <div id="blxParametersSpan" class="bd-action" style="display:none">
@@ -294,10 +290,8 @@ Ein Dashboard fuer LTX Data Logger als PWA
                                 <div class="bd-hint" data-ll="Settings of the logger: intervals, internet, channels, units.">
                                     Settings of the logger: intervals, internet, channels, units.</div>
                                 <!-- Fuer Service -->
-                                <div>
-                                    <button disabled id="blxServiceParametersButton" class="bd-small"><i class="bi-wrench"></i>
-                                        <span data-ll="Service Parameter">Service Parameter</span></button>
-                                </div>
+                                <button disabled id="blxServiceParametersButton" class="bd-small"><i class="bi-wrench"></i>
+                                    <span data-ll="Service Parameter">Service Parameter</span></button>
                             </div>
 
                             <div id="blxClearButtonSpan" class="bd-action" style="display:none">
@@ -310,19 +304,17 @@ Ein Dashboard fuer LTX Data Logger als PWA
 
                         <!-- Meldungen -->
                         <div class="bd-card bd-messages">
-                            <div><i class="bi-info-circle"></i> <span data-ll="Info">Info</span>: <span id="blxInfoLine">-</span></div>
-                            <div><i class="bi-exclamation-triangle"></i> <span data-ll="Last error">Last error</span>: <span id="blxCmdRes">-</span></div>
+                            <div><i class="bi-info-circle"></i><span data-ll="Info">Info</span>: <span id="blxInfoLine">-</span></div>
+                            <div><i class="bi-exclamation-triangle"></i><span data-ll="Last error">Last error</span>: <span id="blxCmdRes">-</span></div>
                         </div>
                         <!-- BLX Elemente fuer Haupseite ENDE -->
 
                     </div>
 
                     <div id="section_graphics" class="jo-user-section" style="display:none;">
-                        <div><b data-ll="Graphics">Graphics</b> <i class="bi-graph-up"></i>
-                            <span style="float:right">
-                                <button id="button-close-graphics">&#10006;</button>
-                            </span>
-                            <hr>
+                        <div class="jo-section-head">
+                            <h2><i class="bi-graph-up"></i> <span data-ll="Graphics">Graphics</span></h2>
+                            <button id="button-close-graphics" class="jo-ghost" aria-label="Close"><i class="bi-x-lg"></i></button>
                         </div>
                         <div id="blxCanvasDiv" class="jo-stdcanvas">
                             <canvas id="blxCanvas"></canvas>
@@ -331,8 +323,8 @@ Ein Dashboard fuer LTX Data Logger als PWA
 
 
                     <div id="section_terminal" class="jo-user-section">
-                        <div><b data-ll="Terminal">Terminal</b> <i class="bi-terminal"></i>
-                            <hr>
+                        <div class="jo-section-head">
+                            <h2><i class="bi-terminal"></i> <span data-ll="Terminal">Terminal</span></h2>
                         </div>
                         <div id="blxTerminal"></div>
                     </div>
@@ -348,10 +340,8 @@ Ein Dashboard fuer LTX Data Logger als PWA
         <footer class="jo-menu-footer">
 
             <div>
-                <span id="bd-online" hidden style="color: var(--lime);" data-llt="Internet of this device (not the transfer of the logger)"><i class="bi-link"></i>
-                    Online</span>
-                <span id="bd-offline" hidden style="color: var(--red);"><i class="bi-ban"></i>
-                    Offline</span>
+                <span id="bd-online" hidden class="bd-net bd-net-on" data-llt="Internet of this device (not the transfer of the logger)">Online</span>
+                <span id="bd-offline" hidden class="bd-net bd-net-off">Offline</span>
             </div>
 
             <div id="blxAutoPIN" class="red back-white jo-padding-s" style="display:none;">
@@ -360,12 +350,10 @@ Ein Dashboard fuer LTX Data Logger als PWA
             <!-- Debug-Button einfach mal da, bei Bedarf aktivieren -->
             <button hidden id="button-debug">(DEBUG)</button>
 
+            <span class="jo-menu-right"></span>
             <!-- Button MUSS 'joInstallApp' heissen! Wird per Default von CSS zu hidden -->
             <button id="joInstallApp" data-ll="Install APP">Install APP</button>
 
-            <span class="jo-menu-right">
-                <span id="bd-version" class="jo-font-small">x.xx xx.xx.xxxx</span>
-            </span>
         </footer>
     </div>
 
