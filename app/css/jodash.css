@@ -1492,6 +1492,56 @@ dialog {
     }
 }
 
+/* Export-Dialog (edtexport.js): baut auf .bd-setup auf. Breite nach Inhalt: die Tabelle der Parametersaetze
+   waechst ohne Umbrueche bis zur Dialog-Obergrenze (92vw), die Einstellungen bleiben schmal */
+.bd-setup.bd-exp {
+    width: auto;
+    min-width: min(34em, 100%);
+
+    & .bd-form-row {
+        max-width: 40em;
+    }
+
+    & .bd-info-grid {
+        margin-bottom: 0.8em;
+    }
+
+    /* Tabelle der Parametersaetze: auf schmalen Bildschirmen seitlich scrollen statt abschneiden */
+    & .bd-exp-sets {
+        overflow-x: auto;
+    }
+
+    & .bd-table th,
+    & .bd-nowrap {
+        white-space: nowrap;
+    }
+
+    & .bd-table td:nth-last-child(-n+2) {
+        overflow-wrap: break-word;
+    }
+
+    & .bd-exp-fmt {
+        flex-wrap: wrap;
+        white-space: normal;
+        margin-bottom: 0.4em;
+
+        & input:checked + span {
+            color: var(--accent);
+        }
+    }
+
+    & .bd-exp-warn {
+        margin-top: 0.6em;
+        font-size: 0.85em;
+        color: var(--warn);
+
+        & div {
+            font-family: var(--mono);
+            color: var(--text-muted);
+        }
+    }
+}
+
 /* Tabelle (Dateien eines Geraets) */
 .bd-table {
     width: 100%;
