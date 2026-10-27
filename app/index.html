@@ -23,7 +23,7 @@ Ein Dashboard fuer LTX Data Logger als PWA
     <meta property="og:image" content="https://joembedded.github.io/ltx_ble_demo/ble_api/static/preview512.png" />
 
     <link rel="manifest" href="manifest.webmanifest">
-    <meta name="theme-color" content="#10253d">
+    <meta name="theme-color" content="#3e3d40">
     <!-- - App Icon entweder als Icon or SVG: -->
     <link rel="icon" type="image/svg+xml" href="./static/favicon.svg">
     <link rel="icon" type="image/x-icon" href="./static/favicon.ico">
@@ -80,7 +80,7 @@ Ein Dashboard fuer LTX Data Logger als PWA
                 </span>
             </span>
             <!-- Name + Version (bd-version wird von blxdash.js gefuellt) -->
-            <span class="jo-brand"><b>eco<span>BLX</span></b> <span id="bd-version" class="jo-version">x.xx xx.xx.xxxx</span></span>
+            <span class="jo-brand"><img class="jo-signet" src="./static/favicon.svg" alt=""><b><span>eco</span>BLX</b> <span id="bd-version" class="jo-version">x.xx xx.xx.xxxx</span></span>
 
             <!-- Positionerung rechts ims Menue, das selbe geht auch im Footer  -->
             <span class="jo-menu-right">
@@ -166,6 +166,8 @@ Ein Dashboard fuer LTX Data Logger als PWA
 
                     </div>
 
+                    <!-- Firmenlogo (hell/dunkel ueber --logo), entfaellt bei schmaler Leiste -->
+                    <div class="jo-sidebar-logo" role="img" aria-label="ecoTech Monitoring"></div>
                 </nav>
                 <!-- Sidebar ENDE, Content START -->
 
@@ -224,8 +226,8 @@ Ein Dashboard fuer LTX Data Logger als PWA
                         <!-- Aktionen als Karten: Knopf + kurze Erklaerung + Ergebnis.
                              Sichtbarkeit der Karten mit id steuert disabler() (display block/none) -->
                         <div class="bd-actions">
-                            <!-- MEASURE for Loggers AND Sensors -->
-                            <div class="bd-action">
+                            <!-- MEASURE for Loggers AND Sensors, erst sichtbar wenn ein Geraet bekannt ist -->
+                            <div id="blxMeasureSpan" class="bd-action" style="display:none">
                                 <button disabled id="blxMeasureButton" class="bd-primary"><i class="bi-speedometer2"></i>
                                     <span data-ll="Measure">Measure</span></button>
                                 <div class="bd-hint" data-ll="Starts a single measurement and shows the current values.">
@@ -236,23 +238,23 @@ Ein Dashboard fuer LTX Data Logger als PWA
 
                             <!-- RAW for Sensors Special Data (e.g. Radar-Raw)-->
                             <div id="blxRawSpan" class="bd-action" style="display:none">
-                                <button disabled id="blxRawButton"><i class="bi-activity"></i>
+                                <button disabled id="blxRawButton" class="bd-primary"><i class="bi-activity"></i>
                                     <span data-ll="Raw Scan">Raw Scan</span></button>
                                 <div class="bd-hint" data-ll="Shows the raw signal of the sensor (click again to stop).">
                                     Shows the raw signal of the sensor (click again to stop).</div>
                             </div>
 
                             <div id="blxUploadButtonSpan" class="bd-action" style="display:none">
-                                <button disabled id="blxUploadButton"><i class="bi-download"></i>
+                                <button disabled id="blxUploadButton" class="bd-primary"><i class="bi-download"></i>
                                     <span data-ll="Export Data">Export Data</span></button>
-                                <div class="bd-hint" data-ll="Loads the recorded data from the logger and saves it as CSV, ZRXP (Kisters) or EDT file.">
-                                    Loads the recorded data from the logger and saves it as CSV, ZRXP (Kisters) or EDT file.</div>
+                                <div class="bd-hint" data-ll="Loads the recorded data from the logger and saves it as CSV, ZRXP or EDT file.">
+                                    Loads the recorded data from the logger and saves it as CSV, ZRXP or EDT file.</div>
                                 <div id="blxGraph"></div>
                             </div>
 
                             <!-- Internet-Uebertragung: sendet 'i1' (bzw. '.lines 200' + 'i129'), nur Logger mit Modem -->
                             <div id="blxInetSpan" class="bd-action" style="display:none">
-                                <button disabled id="blxInetButton"><i class="bi-cloud-arrow-up"></i>
+                                <button disabled id="blxInetButton" class="bd-primary"><i class="bi-cloud-arrow-up"></i>
                                     <span data-ll="Start Internet Transfer">Start Internet Transfer</span></button>
                                 <div class="bd-hint" data-ll="Logger sends its data now to the server (mobile network or LoRaWAN). Progress in the terminal.">
                                     Logger sends its data now to the server (mobile network or LoRaWAN). Progress in the terminal.</div>
@@ -263,7 +265,7 @@ Ein Dashboard fuer LTX Data Logger als PWA
                             </div>
 
                             <div id="blxInfoButtonSpan" class="bd-action" style="display:none">
-                                <button disabled id="blxInfoButton"><i class="bi-hdd"></i>
+                                <button disabled id="blxInfoButton" class="bd-primary"><i class="bi-hdd"></i>
                                     <span data-ll="Memory Info">Memory Info</span></button>
                                 <div class="bd-hint" data-ll="Shows how much of the logger memory is used.">
                                     Shows how much of the logger memory is used.</div>
@@ -272,7 +274,7 @@ Ein Dashboard fuer LTX Data Logger als PWA
                             </div>
 
                             <div id="blxSyncButtonSpan" class="bd-action" style="display:none">
-                                <button disabled id="blxSyncButton"><i class="bi-clock-history"></i>
+                                <button disabled id="blxSyncButton" class="bd-primary"><i class="bi-clock-history"></i>
                                     <span data-ll="Synchronize Time">Synchronize Time</span></button>
                                 <div class="bd-hint" data-ll="Sets the logger clock to the time of this device.">
                                     Sets the logger clock to the time of this device.</div>
@@ -282,9 +284,9 @@ Ein Dashboard fuer LTX Data Logger als PWA
 
                             <div id="blxParametersSpan" class="bd-action" style="display:none">
                                 <div class="bd-row">
-                                    <button disabled id="blxIParamsButton"><i class="bi-sliders"></i>
+                                    <button disabled id="blxIParamsButton" class="bd-primary"><i class="bi-sliders"></i>
                                         <span data-ll="Device Parameter">Device Parameter</span></button>
-                                    <button disabled id="blxChannelParamsButton"><i class="bi-list-columns"></i>
+                                    <button disabled id="blxChannelParamsButton" class="bd-primary"><i class="bi-list-columns"></i>
                                         <span data-ll="Channel Parameter">Channel Parameter</span></button>
                                 </div>
                                 <div class="bd-hint" data-ll="Settings of the logger: intervals, internet, channels, units.">
