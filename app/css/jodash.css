@@ -1624,10 +1624,6 @@ dialog {
         font-variant-numeric: tabular-nums;
     }
 
-    & tr.bd-pending td:first-child {
-        box-shadow: inset 3px 0 0 var(--warn);
-    }
-
     & button {
         min-height: 0;
         padding: 0.25em 0.5em;
