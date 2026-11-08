@@ -41,13 +41,27 @@ Ein Dashboard fuer LTX Data Logger als PWA
         if (location.hostname == 'localhost' || location.hostname == '127.0.0.1') window.jdDebug = 1 // DEBUG-local
 
         function installServiceWorker() {
-            if ('serviceWorker' in navigator) {
-                navigator.serviceWorker.register('sw.js').then(function (reg) {
-                    console.log("ServiceWorker installed")
-                }).catch(function (error) {
-                    console.log("ERROR: ServiceWorker: " + error)
+            if (!('serviceWorker' in navigator)) return
+            // Neuer SW uebernimmt (skipWaiting/claim): blxdash.js entscheidet, ob sofort neu geladen
+            // wird oder nur ein Hinweis erscheint (nie waehrend BLE-Verbindung). Ohne blxdash.js
+            // (alte/neue Dateien gemischt) direkt neu laden.
+            let firstInstall = !navigator.serviceWorker.controller
+            navigator.serviceWorker.addEventListener('controllerchange', function () {
+                if (firstInstall) { firstInstall = false; return } // Erstinstallation, Seite ist bereits aktuell
+                if (typeof window.bdOnSwUpdate === 'function') window.bdOnSwUpdate()
+                else location.reload()
+            })
+            navigator.serviceWorker.register('sw.js', { updateViaCache: 'none' }).then(function (reg) {
+                console.log("ServiceWorker installed")
+                // Offene/installierte App regelmaessig auf neue Version pruefen
+                const check = function () { reg.update().catch(function () { }) }
+                document.addEventListener('visibilitychange', function () {
+                    if (document.visibilityState === 'visible') check()
                 })
-            }
+                setInterval(check, 60 * 60 * 1000)
+            }).catch(function (error) {
+                console.log("ERROR: ServiceWorker: " + error)
+            })
         }
         // Unregister Service Workers (run manually in Console)
         function removeServiceWorker() {
@@ -341,6 +355,8 @@ Ein Dashboard fuer LTX Data Logger als PWA
             <div id="blxAutoPIN" class="red back-white jo-padding-s" style="display:none;">
                 <i class="bi-shield-fill-exclamation  jo-icon-ani-blink"></i> AutoPIN enabled
             </div>
+            <button hidden id="bd-update" class="bd-primary" data-llt="Reload the app to use the new version"><i class="bi-arrow-clockwise"></i>
+                <span data-ll="Update available">Update available</span></button>
             <!-- Debug-Button einfach mal da, bei Bedarf aktivieren -->
             <button hidden id="button-debug">(DEBUG)</button>
 
