@@ -1146,6 +1146,10 @@ dialog {
             padding: 0.6em;
         }
 
+        .bd-chart {
+            width: 100%;
+        }
+
         /* Zusatzknoepfe nebeneinander, Hauptknopf volle Breite */
         .jo-dialog-footer {
             & .jo-dialog-buttons-customextra {
@@ -1544,6 +1548,26 @@ dialog {
         flex-direction: column;
         gap: 0.3em;
     }
+}
+
+/* Grafik-Dialog (lib/ltx-view): feste Breite, Farben aus den App-Tokens (id: staerker als die Modul-Standards) */
+.bd-chart {
+    width: min(1200px, calc(92vw - 2.8em));
+    box-sizing: border-box;
+}
+
+#bd-chart {
+    --lv-fg: var(--text);
+    --lv-muted: var(--text-muted);
+    --lv-panel: var(--surface);
+    --lv-border: var(--border);
+    --lv-accent: var(--accent);
+    --lv-btn: var(--surface-2);
+    --lv-btn-hover: var(--border);
+}
+
+.bd-nowrap {
+    white-space: nowrap;
 }
 
 /* Export-Dialog (edtexport.js): baut auf .bd-setup auf. Breite nach Inhalt: die Tabelle der Parametersaetze

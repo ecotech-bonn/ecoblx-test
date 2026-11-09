@@ -1,0 +1,1 @@
+var e="0.1.0";export{parseEdt,parseValue,MIN_VALID_TIME}from"./edt.js";export{parseIparam}from"./iparam.js";export{buildSeries}from"./series.js";export{createViewer,detectKind}from"./view.js";export{e as VERSION};
