@@ -1,40 +1,29 @@
 <!DOCTYPE html>
-<!-- BlxDashboard
-Ein Dashboard fuer LTX Data Logger als PWA
-(C) JoEmbedded.de
-
-*todo*
-
--->
-
-
+<!-- enviLog - Bluetooth-App (PWA) fuer Datenlogger -->
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <meta meta property="og:title" content="BlxDashboard" />
-    <meta property="og:description"
-        content="Dashboard for LTX Data Loggers with BLE, LTE, LTE-M, LTE-NB, Satellite, ..." />
-    <meta name="description" content="Dashboard for LTX Data Loggers with BLE, LTE, LTE-M, LTE-NB, Satellite, ..." />
-
-    <!-- Pfad 'preview' zeigt in Release immer auf volle URL (nur dann als Link-Preview-Bild immer korrekt darstellbar) -->
-    <meta property="og:image" content="https://joembedded.github.io/ltx_ble_demo/ble_api/static/preview512.png" />
+    <meta property="og:title" content="enviLog" />
+    <meta property="og:description" content="Measure, configure and read out data loggers via Bluetooth." />
+    <meta name="description" content="Measure, configure and read out data loggers via Bluetooth." />
+    <!-- Link-Vorschau braucht eine absolute URL -->
+    <meta property="og:image" content="https://envilog.app/app/static/preview512.png" />
 
     <link rel="manifest" href="manifest.webmanifest">
     <meta name="theme-color" content="#3e3d40">
-    <!-- - App Icon entweder als Icon or SVG: -->
     <link rel="icon" type="image/svg+xml" href="./static/favicon.svg">
     <link rel="icon" type="image/x-icon" href="./static/favicon.ico">
 
-    <!-- IconListe: https://icons.getbootstrap.com/#icons -->
+    <!-- Icons: https://icons.getbootstrap.com -->
     <link rel="stylesheet" href="./static/icons/bootstrap-icons.min.css">
 
-    <link rel="stylesheet" href="./css/jodash.css">
+    <link rel="stylesheet" href="./css/app.css">
     <link rel="stylesheet" href="./css/qrscanner.css">
 
-    <!-- Zuallererst Debug und Service Worker -->
+    <!-- Debug-Level und Service Worker -->
     <script>
 
         window.jdDebug = 0 // PWA-global - DebugLevel: 0:Run, 1-2:Debug: 1:LocalhostDev,NoQRScannerPolyfill, 2: Debug,ScannerPolyfill
@@ -42,8 +31,8 @@ Ein Dashboard fuer LTX Data Logger als PWA
 
         function installServiceWorker() {
             if (!('serviceWorker' in navigator)) return
-            // Neuer SW uebernimmt (skipWaiting/claim): blxdash.js entscheidet, ob sofort neu geladen
-            // wird oder nur ein Hinweis erscheint (nie waehrend BLE-Verbindung). Ohne blxdash.js
+            // Neuer SW uebernimmt (skipWaiting/claim): app.js entscheidet, ob sofort neu geladen
+            // wird oder nur ein Hinweis erscheint (nie waehrend BLE-Verbindung). Ohne app.js
             // (alte/neue Dateien gemischt) direkt neu laden.
             let firstInstall = !navigator.serviceWorker.controller
             navigator.serviceWorker.addEventListener('controllerchange', function () {
@@ -73,14 +62,11 @@ Ein Dashboard fuer LTX Data Logger als PWA
             console.log("ServiceWorker removed")
         }
 
-        // Service Worker auch unter XAMPP/localhost registrieren, damit die
-        // Offline-Funktion dort getestet werden kann.
-        installServiceWorker()
+        installServiceWorker() // auch auf localhost (Offline-Test)
     </script>
-    <!-- Nun erst Hauptscript -->
-    <script src="./js/blxdash.js" defer type="module"></script>
+    <script src="./js/app.js" defer type="module"></script>
 
-    <title>ecoBLX</title>
+    <title>enviLog</title>
 </head>
 
 <body>
@@ -93,23 +79,11 @@ Ein Dashboard fuer LTX Data Logger als PWA
                     <i class="bi-caret-right-fill"></i>
                 </span>
             </span>
-            <!-- Name + Version (bd-version wird von blxdash.js gefuellt) -->
-            <span class="jo-brand"><img class="jo-signet" src="./static/favicon.svg" alt=""><b><span>eco</span>BLX</b> <span id="bd-version" class="jo-version">x.xx xx.xx.xxxx</span></span>
+            <!-- Name + Version (bd-version wird von app.js gefuellt) -->
+            <span class="jo-brand"><img class="jo-signet" src="./static/favicon.svg" alt=""><b><span>envi</span>Log</b> <span id="bd-version" class="jo-version">x.xx xx.xx.xxxx</span></span>
 
             <!-- Positionerung rechts ims Menue, das selbe geht auch im Footer  -->
-            <span class="jo-menu-right">
-
-                <!-- 
-                <i class="bi-translate jo-icon-ani-beat"></i>
-                :'<span data-ll="Language">?</span>', 
-                <i class="bi-megaphone"></i>
-                :'<span data-ll="Greeting">?</span>' 
-                <i class="bi-heart-fill jo-icon-ani-beat neonEffectRed"></i>
-                <a href="https://www.xxx.org/" class="blebluelight jo-font-small">by XXX</a>
-                -->
-
-                &nbsp;
-            </span>
+            <span class="jo-menu-right">&nbsp;</span>
         </header>
 
         <div class="jo-chcontent">
@@ -119,7 +93,6 @@ Ein Dashboard fuer LTX Data Logger als PWA
                 <nav class="jo-sidebar">
                     <div data-ll="Menu" class="jo-sinavinfo">Menu</div>
 
-                    <!-- Sinnvoll Fuer 'navitem'-Buttons: normal oder 'disabled', evtl. in Kombi mit Scrollspy -->
                     <div id="sidebutton-maincontent" class="jo-sibu jo-disabled">
                         <i class="bi-house"></i>
                         <span data-ll="Main Content">Main Content</span>
@@ -139,9 +112,8 @@ Ein Dashboard fuer LTX Data Logger als PWA
 
                     <div id="sidebutton-bluetooth" class="jo-sibu bleblue jo-badge-smallcircle">
                         <i class="bi-bluetooth"></i>
-                        <!-- Connet/Nr/Disconnect -->
                         <span data-ll="Connect" id="blxConnectButtonText">Connect</span>
-                        <!-- Dieses Feld kann vom BLX veraendert werden: hidden und Color -->
+                        <!-- Signalstaerke, gesetzt von app.js -->
                         <span id="blxSignal" hidden class="jo-badge-span">... dBm</span>
                     </div>
 
@@ -161,27 +133,17 @@ Ein Dashboard fuer LTX Data Logger als PWA
 
                     <div class="jo-thin-hr"></div>
 
-                    <!-- Hier Liste der Geraet in HTML ,wird dynamisch gefuellt -->
-                    <div id="nav-devicelist">
-
-                        <!-- <div id="user-device-xx" class="jo-sibu">
-                            <i class="bi-gear"></i>
-                            <span>LTX1234567890</span>
-                            <span class="jo-badge-span jo-badge-unimportant">321</span>
-                        </div> -->
-
-                    </div>
+                    <!-- Bekannte Geraete, gefuellt von app.js -->
+                    <div id="nav-devicelist"></div>
 
                     <!-- Firmenlogo (hell/dunkel ueber --logo), entfaellt bei schmaler Leiste -->
                     <div class="jo-sidebar-logo" role="img" aria-label="ecoTech Monitoring"></div>
                 </nav>
                 <!-- Sidebar ENDE, Content START -->
 
-                <!-- Content(s) START. Alle in diesem Container! -->
                 <main class="jo-content">
 
                     <div id="section_main" class="jo-user-section">
-                        <!-- BLX Elemente fuer Haupseite START -->
                         <!-- Status-Karte: Verbindungszustand + naechster Schritt (gefuellt von bdUpdateStatus()) -->
                         <div id="blxStatusCard" class="bd-status bd-status-off">
                             <i id="blxStatusIcon" class="bi-bluetooth"></i>
@@ -216,8 +178,8 @@ Ein Dashboard fuer LTX Data Logger als PWA
                                 <div class="bd-kv"><span data-ll="Name">Name</span><b id="blxDeviceName">-</b></div>
                                 <div class="bd-kv"><span>MAC</span><span id="blxMAC" class="bd-mono">-</span></div>
                                 <div class="bd-kv"><span data-ll="Type">Type</span><span id="blxType">-</span></div>
-                                <div class="bd-kv"><span>Firmware</span><span>V<span id="blxFW">-</span></span></div>
-                                <div class="bd-kv" data-llt="Bluetooth signal strength (RSSI): above -70 dBm good, below -85 dBm weak">
+                                <div class="bd-kv"><span>Firmware</span><span id="blxFW">-</span></div>
+                                <div class="bd-kv" data-llt="Bluetooth signal strength (RSSI)">
                                     <span data-ll="Signal">Signal</span><span id="blxRssi">-</span></div>
                             </div>
                             <label class="bd-check" data-llt="Pitch shows the radio signal strength (helps to find the logger)">
@@ -238,8 +200,8 @@ Ein Dashboard fuer LTX Data Logger als PWA
                             <div id="blxMeasureSpan" class="bd-action" style="display:none">
                                 <button disabled id="blxMeasureButton" class="bd-primary"><i class="bi-speedometer2"></i>
                                     <span data-ll="Measure">Measure</span></button>
-                                <div class="bd-hint" data-ll="Starts a single measurement and shows the current values.">
-                                    Starts a single measurement and shows the current values.</div>
+                                <div class="bd-hint" data-ll="Single measurement with current values.">
+                                    Single measurement with current values.</div>
                                 <div class="bd-result"><span class="bd-result-label" data-ll="Values">Values</span>
                                     <div id="blxMeasureData" class="bd-meas">-</div></div>
                             </div>
@@ -248,25 +210,24 @@ Ein Dashboard fuer LTX Data Logger als PWA
                             <div id="blxRawSpan" class="bd-action" style="display:none">
                                 <button disabled id="blxRawButton" class="bd-primary"><i class="bi-activity"></i>
                                     <span data-ll="Raw Scan">Raw Scan</span></button>
-                                <div class="bd-hint" data-ll="Shows the raw signal of the sensor (click again to stop).">
-                                    Shows the raw signal of the sensor (click again to stop).</div>
+                                <div class="bd-hint" data-ll="Raw sensor signal (click again to stop).">
+                                    Raw sensor signal (click again to stop).</div>
                             </div>
 
                             <div id="blxUploadButtonSpan" class="bd-action" style="display:none">
                                 <button disabled id="blxUploadButton" class="bd-primary"><i class="bi-download"></i>
                                     <span data-ll="Export Data">Export Data</span></button>
-                                <div class="bd-hint" data-ll="Loads the recorded data from the logger and saves it as CSV, ZRXP or EDT file.">
-                                    Loads the recorded data from the logger and saves it as CSV, ZRXP or EDT file.</div>
-                                <div id="blxGraph"></div>
+                                <div class="bd-hint" data-ll="Read recorded data and save as CSV, ZRXP or EDT.">
+                                    Read recorded data and save as CSV, ZRXP or EDT.</div>
                             </div>
 
                             <!-- Internet-Uebertragung: sendet 'i1' (bzw. '.lines 200' + 'i129'), nur Logger mit Modem -->
                             <div id="blxInetSpan" class="bd-action" style="display:none">
                                 <button disabled id="blxInetButton" class="bd-primary"><i class="bi-cloud-arrow-up"></i>
                                     <span data-ll="Start Internet Transfer">Start Internet Transfer</span></button>
-                                <div class="bd-hint" data-ll="Logger sends its data now to the server (mobile network or LoRaWAN). Progress in the terminal.">
-                                    Logger sends its data now to the server (mobile network or LoRaWAN). Progress in the terminal.</div>
-                                <label id="blxInetDiagLabel" class="bd-check bd-hint" data-llt="Verbose output with modem commands (i129). Contains server and device details!">
+                                <div class="bd-hint" data-ll="Send data to the server now (mobile network or LoRaWAN).">
+                                    Send data to the server now (mobile network or LoRaWAN).</div>
+                                <label id="blxInetDiagLabel" class="bd-check bd-hint" data-llt="Includes modem commands (i129) with server and device details">
                                     <input disabled checked type="checkbox" id="blxInetDiag" class="jo-switch">
                                     <span data-ll="Detailed diagnostic log">Detailed diagnostic log</span>
                                 </label>
@@ -275,8 +236,8 @@ Ein Dashboard fuer LTX Data Logger als PWA
                             <div id="blxInfoButtonSpan" class="bd-action" style="display:none">
                                 <button disabled id="blxInfoButton" class="bd-primary"><i class="bi-hdd"></i>
                                     <span data-ll="Memory Info">Memory Info</span></button>
-                                <div class="bd-hint" data-ll="Shows how much of the logger memory is used.">
-                                    Shows how much of the logger memory is used.</div>
+                                <div class="bd-hint" data-ll="Used logger memory.">
+                                    Used logger memory.</div>
                                 <div class="bd-result"><span class="bd-result-label" data-ll="Memory">Memory</span>
                                     <span id="blxMemory">-</span></div>
                             </div>
@@ -297,8 +258,8 @@ Ein Dashboard fuer LTX Data Logger als PWA
                                     <button disabled id="blxChannelParamsButton" class="bd-primary"><i class="bi-list-columns"></i>
                                         <span data-ll="Channel Parameter">Channel Parameter</span></button>
                                 </div>
-                                <div class="bd-hint" data-ll="Settings of the logger: intervals, internet, channels, units.">
-                                    Settings of the logger: intervals, internet, channels, units.</div>
+                                <div class="bd-hint" data-ll="Intervals, internet, channels, units.">
+                                    Intervals, internet, channels, units.</div>
                                 <!-- Fuer Service -->
                                 <button disabled id="blxServiceParametersButton" class="bd-small"><i class="bi-wrench"></i>
                                     <span data-ll="Service Parameter">Service Parameter</span></button>
@@ -307,8 +268,8 @@ Ein Dashboard fuer LTX Data Logger als PWA
                             <div id="blxClearButtonSpan" class="bd-action" style="display:none">
                                 <button disabled id="blxClearButton" class="bd-danger"><i class="bi-trash3"></i>
                                     <span data-ll="Clear Memory">Clear Memory</span></button>
-                                <div class="bd-hint" data-ll="Deletes all recorded data on the logger and starts a new recording.">
-                                    Deletes all recorded data on the logger and starts a new recording.</div>
+                                <div class="bd-hint" data-ll="Deletes all recorded data and starts a new recording.">
+                                    Deletes all recorded data and starts a new recording.</div>
                             </div>
                         </div>
 
@@ -317,8 +278,6 @@ Ein Dashboard fuer LTX Data Logger als PWA
                             <div><i class="bi-info-circle"></i><span data-ll="Info">Info</span>: <span id="blxInfoLine">-</span></div>
                             <div><i class="bi-chat-left-text"></i><span data-ll="Last message">Last message</span>: <span id="blxCmdRes">-</span></div>
                         </div>
-                        <!-- BLX Elemente fuer Haupseite ENDE -->
-
                     </div>
 
                     <div id="section_graphics" class="jo-user-section" style="display:none;">
@@ -361,12 +320,11 @@ Ein Dashboard fuer LTX Data Logger als PWA
             </div>
             <button hidden id="bd-update" class="bd-primary" data-llt="Reload the app to use the new version"><i class="bi-arrow-clockwise"></i>
                 <span data-ll="Update available">Update available</span></button>
-            <!-- Debug-Button einfach mal da, bei Bedarf aktivieren -->
-            <button hidden id="button-debug">(DEBUG)</button>
+            <button hidden id="button-debug">Debug</button>
 
             <span class="jo-menu-right"></span>
-            <!-- Button MUSS 'joInstallApp' heissen! Wird per Default von CSS zu hidden -->
-            <button id="joInstallApp" data-ll="Install APP">Install APP</button>
+            <!-- id 'joInstallApp' wird von ui.js erwartet, per CSS zunaechst versteckt -->
+            <button id="joInstallApp" data-ll="Install app">Install app</button>
 
         </footer>
     </div>

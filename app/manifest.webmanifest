@@ -1,8 +1,8 @@
 {
 	"lang": "en",
-	"name": "BlxDashboard",
-	"short_name": "BlxDashboard",
-	"description": "Dashboard for LTX Data Loggers with BLE, LTE, LTE-M, LTE-NB, Satellite, ...",
+	"name": "enviLog",
+	"short_name": "enviLog",
+	"description": "Measure, configure and read out data loggers via Bluetooth.",
 	"background_color": "#f4f5f5",
 	"theme_color": "#3e3d40",
 	"display": "standalone",
@@ -32,14 +32,14 @@
 			"src": "./static/preview512.png",
 			"type": "image/png",
 			"sizes": "512x512",
-			"label": "Preview512x512"
+			"label": "enviLog"
 		},
 		{
 			"src": "./static/preview1024x768.png",
 			"sizes": "1024x768",
 			"type": "image/png",
 			"form_factor": "wide",
-			"label": "Preview1024x768"
+			"label": "enviLog"
 		}
 	]
 }

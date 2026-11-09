@@ -1,4 +1,4 @@
-/* jodash.css - (C)JoEmbedded.de
+/* app.css - Gestaltung enviLog
    Aufbau: 1. Design-Tokens (hell/dunkel)  2. Grundelemente (Text, Knoepfe, Eingaben)
    3. App-Rahmen (Kopf, Seitenleiste, Inhalt, Fuss)  4. Dialoge  5. Hauptseite (bd-*)
    6. Terminal/Grafik  7. Parameter-Editoren (pf-*, ce-*) */
@@ -622,7 +622,7 @@ progress {
         height: var(--hdrheight);
         box-sizing: border-box;
 
-        /* Hamburger mit Richtungsanzeige (jodash.js dreht .jo-main-hambind) */
+        /* Hamburger mit Richtungsanzeige (ui.js dreht .jo-main-hambind) */
         .jo-main-hamb {
             position: relative;
             display: inline-flex;
@@ -1219,7 +1219,7 @@ dialog {
     }
 }
 
-/* ===================== 5. Hauptseite (index.html/blxdash.js) ===================== */
+/* ===================== 5. Hauptseite (index.html/app.js) ===================== */
 .bd-card,
 .bd-status,
 .bd-action {
