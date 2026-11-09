@@ -217,10 +217,12 @@ Ein Dashboard fuer LTX Data Logger als PWA
                                 <div class="bd-kv"><span>MAC</span><span id="blxMAC" class="bd-mono">-</span></div>
                                 <div class="bd-kv"><span data-ll="Type">Type</span><span id="blxType">-</span></div>
                                 <div class="bd-kv"><span>Firmware</span><span>V<span id="blxFW">-</span></span></div>
+                                <div class="bd-kv" data-llt="Bluetooth signal strength (RSSI): above -70 dBm good, below -85 dBm weak">
+                                    <span data-ll="Signal">Signal</span><span id="blxRssi">-</span></div>
                             </div>
                             <label class="bd-check" data-llt="Pitch shows the radio signal strength (helps to find the logger)">
                                 <input disabled type="checkbox" id="blxEcholot" class="jo-switch">
-                                <i class="bi-music-note-beamed"></i> <span data-ll="Signal tone">Signal tone</span>
+                                <i class="bi-broadcast"></i> <span data-ll="Locate logger (signal tone)">Locate logger (signal tone)</span>
                             </label>
                         </div>
 
@@ -265,7 +267,7 @@ Ein Dashboard fuer LTX Data Logger als PWA
                                 <div class="bd-hint" data-ll="Logger sends its data now to the server (mobile network or LoRaWAN). Progress in the terminal.">
                                     Logger sends its data now to the server (mobile network or LoRaWAN). Progress in the terminal.</div>
                                 <label id="blxInetDiagLabel" class="bd-check bd-hint" data-llt="Verbose output with modem commands (i129). Contains server and device details!">
-                                    <input disabled type="checkbox" id="blxInetDiag" class="jo-switch">
+                                    <input disabled checked type="checkbox" id="blxInetDiag" class="jo-switch">
                                     <span data-ll="Detailed diagnostic log">Detailed diagnostic log</span>
                                 </label>
                             </div>
@@ -313,7 +315,7 @@ Ein Dashboard fuer LTX Data Logger als PWA
                         <!-- Meldungen -->
                         <div class="bd-card bd-messages">
                             <div><i class="bi-info-circle"></i><span data-ll="Info">Info</span>: <span id="blxInfoLine">-</span></div>
-                            <div><i class="bi-exclamation-triangle"></i><span data-ll="Last error">Last error</span>: <span id="blxCmdRes">-</span></div>
+                            <div><i class="bi-chat-left-text"></i><span data-ll="Last message">Last message</span>: <span id="blxCmdRes">-</span></div>
                         </div>
                         <!-- BLX Elemente fuer Haupseite ENDE -->
 
@@ -333,6 +335,8 @@ Ein Dashboard fuer LTX Data Logger als PWA
                     <div id="section_terminal" class="jo-user-section">
                         <div class="jo-section-head">
                             <h2><i class="bi-terminal"></i> <span data-ll="Terminal">Terminal</span></h2>
+                            <button id="button-toggle-terminal" class="jo-ghost" aria-expanded="true" data-llt="Show/hide terminal">
+                                <i class="bi-chevron-up"></i></button>
                         </div>
                         <div id="blxTerminal"></div>
                     </div>
