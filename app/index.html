@@ -1,14 +1,16 @@
 <!DOCTYPE html>
 <!-- Alte Adresse envilog.app/app/ (bis 2026-11-10): weiter auf envilog.app/ (Parameter und #Anker bleiben).
-     Wird von make/publish_pages.ps1 nach /app/ kopiert. -->
+     Wird von make/publish_pages.ps1 nach /app/ kopiert.
+     Ziel bewusst mit '?from=app' statt nur '/': Browser haben evtl. noch die alte Startseite '/' im HTTP-Cache
+     (max-age=600), die auf app/ weiterleitete -> ohne eigene Adresse entstuende eine Endlos-Weiterleitung. -->
 <html lang="de">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="refresh" content="0; url=../">
+<meta http-equiv="refresh" content="0; url=../?from=app">
 <link rel="canonical" href="../">
 <title>enviLog</title>
-<script>location.replace('../' + location.search + location.hash)</script>
+<script>location.replace('../' + (location.search ? location.search + '&' : '?') + 'from=app' + location.hash)</script>
 </head>
-<body><a href="../">enviLog</a></body>
+<body><a href="../?from=app">enviLog</a></body>
 </html>
