@@ -1,9 +1,338 @@
-﻿<!DOCTYPE html>
-<html lang="de">
+<!DOCTYPE html>
+<!-- enviLog - Bluetooth-App (PWA) fuer Datenlogger -->
+<html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta http-equiv="refresh" content="0; url=app/">
-<title>enviLog</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta property="og:title" content="enviLog" />
+    <meta property="og:description" content="Measure, configure and read out data loggers via Bluetooth." />
+    <meta name="description" content="Measure, configure and read out data loggers via Bluetooth." />
+    <!-- Link-Vorschau braucht eine absolute URL -->
+    <meta property="og:image" content="https://envilog.app/static/preview512.png" />
+
+    <link rel="manifest" href="manifest.webmanifest">
+    <meta name="theme-color" content="#3e3d40">
+    <link rel="icon" type="image/svg+xml" href="./static/favicon.svg">
+    <link rel="icon" type="image/x-icon" href="./static/favicon.ico">
+
+    <!-- Icons: https://icons.getbootstrap.com -->
+    <link rel="stylesheet" href="./static/icons/bootstrap-icons.min.css">
+
+    <link rel="stylesheet" href="./css/app.css">
+    <link rel="stylesheet" href="./css/qrscanner.css">
+
+    <!-- Debug-Level und Service Worker -->
+    <script>
+
+        window.jdDebug = 0 // PWA-global - DebugLevel: 0:Run, 1-2:Debug: 1:LocalhostDev,NoQRScannerPolyfill, 2: Debug,ScannerPolyfill
+        if (location.hostname == 'localhost' || location.hostname == '127.0.0.1') window.jdDebug = 1 // DEBUG-local
+
+        function installServiceWorker() {
+            if (!('serviceWorker' in navigator)) return
+            // Neuer SW uebernimmt (skipWaiting/claim): app.js entscheidet, ob sofort neu geladen
+            // wird oder nur ein Hinweis erscheint (nie waehrend BLE-Verbindung). Ohne app.js
+            // (alte/neue Dateien gemischt) direkt neu laden.
+            let firstInstall = !navigator.serviceWorker.controller
+            navigator.serviceWorker.addEventListener('controllerchange', function () {
+                if (firstInstall) { firstInstall = false; return } // Erstinstallation, Seite ist bereits aktuell
+                if (typeof window.bdOnSwUpdate === 'function') window.bdOnSwUpdate()
+                else location.reload()
+            })
+            navigator.serviceWorker.register('sw.js', { updateViaCache: 'none' }).then(function (reg) {
+                console.log("ServiceWorker installed")
+                // Offene/installierte App regelmaessig auf neue Version pruefen
+                const check = function () { reg.update().catch(function () { }) }
+                document.addEventListener('visibilitychange', function () {
+                    if (document.visibilityState === 'visible') check()
+                })
+                setInterval(check, 60 * 60 * 1000)
+            }).catch(function (error) {
+                console.log("ERROR: ServiceWorker: " + error)
+            })
+        }
+        // Unregister Service Workers (run manually in Console)
+        function removeServiceWorker() {
+            navigator.serviceWorker.getRegistrations().then(function (registrations) {
+                for (let registration of registrations) {
+                    registration.unregister()
+                }
+            })
+            console.log("ServiceWorker removed")
+        }
+
+        installServiceWorker() // auch auf localhost (Offline-Test)
+    </script>
+    <script src="./js/app.js" defer type="module"></script>
+
+    <title>enviLog</title>
 </head>
-<body><a href="app/">enviLog</a></body>
+
+<body>
+    <div class="jo-vcontainer">
+
+        <header class="jo-menu-header">
+            <span class="jo-main-hamb"> <!-- Main Hambuger mit Indicator -->
+                <i class="bi-list"></i>
+                <span class="jo-main-hambind">
+                    <i class="bi-caret-right-fill"></i>
+                </span>
+            </span>
+            <!-- Name + Version (bd-version wird von app.js gefuellt) -->
+            <span class="jo-brand"><img class="jo-signet" src="./static/favicon.svg" alt=""><b><span>envi</span>Log</b> <span id="bd-version" class="jo-version">x.xx xx.xx.xxxx</span></span>
+
+            <!-- Positionerung rechts ims Menue, das selbe geht auch im Footer  -->
+            <span class="jo-menu-right">&nbsp;</span>
+        </header>
+
+        <div class="jo-chcontent">
+
+            <div class="jo-sidebarcontent">
+                <!-- Navigation Sidebar START -->
+                <nav class="jo-sidebar">
+                    <div data-ll="Menu" class="jo-sinavinfo">Menu</div>
+
+                    <div id="sidebutton-maincontent" class="jo-sibu jo-disabled">
+                        <i class="bi-house"></i>
+                        <span data-ll="Main Content">Main Content</span>
+                    </div>
+
+                    <div id="sidebutton-graph" class="jo-sibu jo-disabled">
+                        <i class="bi-graph-up"></i>
+                        <span data-ll="Graphics">Graphics</span>
+                    </div>
+
+                    <div id="sidebutton-terminal" class="jo-sibu jo-disabled">
+                        <i class="bi-terminal"></i>
+                        <span data-ll="Terminal">Terminal</span>
+                    </div>
+
+                    <div class="jo-thin-hr"></div>
+
+                    <div id="sidebutton-bluetooth" class="jo-sibu bleblue jo-badge-smallcircle">
+                        <i class="bi-bluetooth"></i>
+                        <span data-ll="Connect" id="blxConnectButtonText">Connect</span>
+                        <!-- Signalstaerke, gesetzt von app.js -->
+                        <span id="blxSignal" hidden class="jo-badge-span">... dBm</span>
+                    </div>
+
+                    <div class="jo-thin-hr"></div>
+
+                    <div id="sidebutton-setup" class="jo-sibu">
+                        <i class="bi-gear"></i>
+                        <span data-ll="Setup">Setup</span>
+                    </div>
+
+                    <div data-ll="Devices" class="jo-sinavinfo">Devices</div>
+
+                    <div id="sidebutton-qrscan" class="jo-sibu">
+                        <i class="bi-qr-code-scan"></i>
+                        <span data-ll="Scan">Scan</span>
+                    </div>
+
+                    <div class="jo-thin-hr"></div>
+
+                    <!-- Bekannte Geraete, gefuellt von app.js -->
+                    <div id="nav-devicelist"></div>
+
+                    <!-- Firmenlogo (hell/dunkel ueber --logo), entfaellt bei schmaler Leiste -->
+                    <div class="jo-sidebar-logo" role="img" aria-label="ecoTech Monitoring"></div>
+                </nav>
+                <!-- Sidebar ENDE, Content START -->
+
+                <main class="jo-content">
+
+                    <div id="section_main" class="jo-user-section">
+                        <!-- Status-Karte: Verbindungszustand + naechster Schritt (gefuellt von bdUpdateStatus()) -->
+                        <div id="blxStatusCard" class="bd-status bd-status-off">
+                            <i id="blxStatusIcon" class="bi-bluetooth"></i>
+                            <div class="bd-status-text">
+                                <b id="blxStatusTitle">-</b>
+                                <span id="blxStatusHint" class="bd-hint">-</span>
+                            </div>
+                            <button id="blxStatusConnect" class="bd-primary">
+                                <i class="bi-bluetooth"></i> <span id="blxStatusConnectText">-</span>
+                            </button>
+                        </div>
+
+                        <!-- PIN-Eingabe, nur sichtbar wenn Geraet eine PIN verlangt -->
+                        <div id="blxPinEnter" class="bd-card bd-attention" style="display:none">
+                            <div><i class="bi-shield-lock"></i> <b data-ll="PIN required">PIN required</b></div>
+                            <div class="bd-hint" data-ll="Enter the PIN of the device or scan its QR code.">
+                                Enter the PIN of the device or scan its QR code.</div>
+                            <div class="bd-row">
+                                <input type="text" id="blxPIN" size="9" inputmode="numeric" autocomplete="off"
+                                    placeholder="PIN">
+                                <button id="blxSetPinButton" class="bd-primary"><i class="bi-unlock"></i>
+                                    <span data-ll="Set PIN">Set PIN</span></button>
+                                <button id="blxScanPinButton">
+                                    <i class="bi-qr-code-scan"></i> <span data-ll="Scan">Scan</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Geraeteinfo: Kennwerte nebeneinander -->
+                        <div class="bd-card bd-device">
+                            <div class="bd-info-grid">
+                                <div class="bd-kv"><span data-ll="Name">Name</span><b id="blxDeviceName">-</b></div>
+                                <div class="bd-kv"><span>MAC</span><span id="blxMAC" class="bd-mono">-</span></div>
+                                <div class="bd-kv"><span data-ll="Type">Type</span><span id="blxType">-</span></div>
+                                <div class="bd-kv"><span>Firmware</span><span id="blxFW">-</span></div>
+                                <div class="bd-kv" data-llt="Bluetooth signal strength (RSSI)">
+                                    <span data-ll="Signal">Signal</span><span id="blxRssi">-</span></div>
+                            </div>
+                            <label class="bd-check" data-llt="Pitch shows the radio signal strength (helps to find the logger)">
+                                <input disabled type="checkbox" id="blxEcholot" class="jo-switch">
+                                <i class="bi-broadcast"></i> <span data-ll="Locate logger (signal tone)">Locate logger (signal tone)</span>
+                            </label>
+                        </div>
+
+                        <div id="blxBadge" class="bd-card" style="display:none">
+                            <!-- print Badge only for Factory Setup-->
+                            <button disabled id="blxBadgeButton"><i class="bi-printer"></i> Print Badge</button>
+                        </div>
+
+                        <!-- Aktionen als Karten: Knopf + kurze Erklaerung + Ergebnis.
+                             Sichtbarkeit der Karten mit id steuert disabler() (display block/none) -->
+                        <div class="bd-actions">
+                            <!-- MEASURE for Loggers AND Sensors, erst sichtbar wenn ein Geraet bekannt ist -->
+                            <div id="blxMeasureSpan" class="bd-action" style="display:none">
+                                <button disabled id="blxMeasureButton" class="bd-primary"><i class="bi-speedometer2"></i>
+                                    <span data-ll="Measure">Measure</span></button>
+                                <div class="bd-hint" data-ll="Single measurement with current values.">
+                                    Single measurement with current values.</div>
+                                <div class="bd-result"><span class="bd-result-label" data-ll="Values">Values</span>
+                                    <div id="blxMeasureData" class="bd-meas">-</div></div>
+                            </div>
+
+                            <!-- RAW for Sensors Special Data (e.g. Radar-Raw)-->
+                            <div id="blxRawSpan" class="bd-action" style="display:none">
+                                <button disabled id="blxRawButton" class="bd-primary"><i class="bi-activity"></i>
+                                    <span data-ll="Raw Scan">Raw Scan</span></button>
+                                <div class="bd-hint" data-ll="Raw sensor signal (click again to stop).">
+                                    Raw sensor signal (click again to stop).</div>
+                            </div>
+
+                            <div id="blxUploadButtonSpan" class="bd-action" style="display:none">
+                                <div class="bd-row">
+                                    <button disabled id="blxUploadButton" class="bd-primary"><i class="bi-download"></i>
+                                        <span data-ll="Export Data">Export Data</span></button>
+                                    <button disabled id="blxChartButton" class="bd-primary"><i class="bi-graph-up"></i>
+                                        <span data-ll="Chart">Chart</span></button>
+                                </div>
+                                <div class="bd-hint" data-ll="Read recorded data: export as CSV, ZRXP or EDT, or show as chart.">
+                                    Read recorded data: export as CSV, ZRXP or EDT, or show as chart.</div>
+                            </div>
+
+                            <!-- Internet-Uebertragung: sendet 'i1' (bzw. '.lines 200' + 'i129'), nur Logger mit Modem -->
+                            <div id="blxInetSpan" class="bd-action" style="display:none">
+                                <button disabled id="blxInetButton" class="bd-primary"><i class="bi-cloud-arrow-up"></i>
+                                    <span data-ll="Start Internet Transfer">Start Internet Transfer</span></button>
+                                <div class="bd-hint" data-ll="Send data to the server now (mobile network or LoRaWAN).">
+                                    Send data to the server now (mobile network or LoRaWAN).</div>
+                                <label id="blxInetDiagLabel" class="bd-check bd-hint" data-llt="Includes modem commands (i129) with server and device details">
+                                    <input disabled checked type="checkbox" id="blxInetDiag" class="jo-switch">
+                                    <span data-ll="Detailed diagnostic log">Detailed diagnostic log</span>
+                                </label>
+                            </div>
+
+                            <div id="blxInfoButtonSpan" class="bd-action" style="display:none">
+                                <button disabled id="blxInfoButton" class="bd-primary"><i class="bi-hdd"></i>
+                                    <span data-ll="Memory Info">Memory Info</span></button>
+                                <div class="bd-hint" data-ll="Used logger memory.">
+                                    Used logger memory.</div>
+                                <div class="bd-result"><span class="bd-result-label" data-ll="Memory">Memory</span>
+                                    <span id="blxMemory">-</span></div>
+                            </div>
+
+                            <div id="blxSyncButtonSpan" class="bd-action" style="display:none">
+                                <button disabled id="blxSyncButton" class="bd-primary"><i class="bi-clock-history"></i>
+                                    <span data-ll="Synchronize Time">Synchronize Time</span></button>
+                                <div class="bd-hint" data-ll="Sets the logger clock to the time of this device.">
+                                    Sets the logger clock to the time of this device.</div>
+                                <div class="bd-result"><span class="bd-result-label" data-ll="Time deviation">Time deviation</span>
+                                    <span id="blxSync">-</span></div>
+                            </div>
+
+                            <div id="blxParametersSpan" class="bd-action" style="display:none">
+                                <div class="bd-row">
+                                    <button disabled id="blxIParamsButton" class="bd-primary"><i class="bi-sliders"></i>
+                                        <span data-ll="Device Parameter">Device Parameter</span></button>
+                                    <button disabled id="blxChannelParamsButton" class="bd-primary"><i class="bi-list-columns"></i>
+                                        <span data-ll="Channel Parameter">Channel Parameter</span></button>
+                                </div>
+                                <div class="bd-hint" data-ll="Intervals, internet, channels, units.">
+                                    Intervals, internet, channels, units.</div>
+                                <!-- Fuer Service -->
+                                <button disabled id="blxServiceParametersButton" class="bd-small"><i class="bi-wrench"></i>
+                                    <span data-ll="Service Parameter">Service Parameter</span></button>
+                            </div>
+
+                            <div id="blxClearButtonSpan" class="bd-action" style="display:none">
+                                <button disabled id="blxClearButton" class="bd-danger"><i class="bi-trash3"></i>
+                                    <span data-ll="Clear Memory">Clear Memory</span></button>
+                                <div class="bd-hint" data-ll="Deletes all recorded data and starts a new recording.">
+                                    Deletes all recorded data and starts a new recording.</div>
+                            </div>
+                        </div>
+
+                        <!-- Meldungen -->
+                        <div class="bd-card bd-messages">
+                            <div><i class="bi-info-circle"></i><span data-ll="Info">Info</span>: <span id="blxInfoLine">-</span></div>
+                            <div><i class="bi-chat-left-text"></i><span data-ll="Last message">Last message</span>: <span id="blxCmdRes">-</span></div>
+                        </div>
+                    </div>
+
+                    <div id="section_graphics" class="jo-user-section" style="display:none;">
+                        <div class="jo-section-head">
+                            <h2><i class="bi-graph-up"></i> <span data-ll="Graphics">Graphics</span></h2>
+                            <button id="button-close-graphics" class="jo-ghost" aria-label="Close"><i class="bi-x-lg"></i></button>
+                        </div>
+                        <div id="blxCanvasDiv" class="jo-stdcanvas">
+                            <canvas id="blxCanvas"></canvas>
+                        </div>
+                    </div>
+
+
+                    <div id="section_terminal" class="jo-user-section">
+                        <div class="jo-section-head">
+                            <h2><i class="bi-terminal"></i> <span data-ll="Terminal">Terminal</span></h2>
+                            <button id="button-toggle-terminal" class="jo-ghost" aria-expanded="true" data-llt="Show/hide terminal">
+                                <i class="bi-chevron-up"></i></button>
+                        </div>
+                        <div id="blxTerminal"></div>
+                    </div>
+
+                </main>
+                <!-- Content ENDE -->
+
+            </div>
+
+        </div> <!-- Ende jo-ccontent-->
+
+        <!-- Rechte Teile im Footer wie im Header -->
+        <footer class="jo-menu-footer">
+
+            <div>
+                <span id="bd-online" hidden class="bd-net bd-net-on" data-llt="Internet of this device (not the transfer of the logger)">Online</span>
+                <span id="bd-offline" hidden class="bd-net bd-net-off">Offline</span>
+            </div>
+
+            <div id="blxAutoPIN" class="red back-white jo-padding-s" style="display:none;">
+                <i class="bi-shield-fill-exclamation  jo-icon-ani-blink"></i> AutoPIN enabled
+            </div>
+            <button hidden id="bd-update" class="bd-primary" data-llt="Reload the app to use the new version"><i class="bi-arrow-clockwise"></i>
+                <span data-ll="Update available">Update available</span></button>
+            <button hidden id="button-debug">Debug</button>
+
+            <span class="jo-menu-right"></span>
+            <!-- id 'joInstallApp' wird von ui.js erwartet, per CSS zunaechst versteckt -->
+            <button id="joInstallApp" data-ll="Install app">Install app</button>
+
+        </footer>
+    </div>
+
+</body>
+
 </html>

@@ -1,1 +1,16 @@
-let CACHE_PREFIX="envilog-static-",LEGACY_PREFIXES=["blxdash-static-"],CACHE_NAME=CACHE_PREFIX+"2026-11-10a",PRECACHE_URLS=["./index.html","./manifest.webmanifest","./favicon.ico","./css/app.css","./css/qrscanner.css","./js/app.js","./js/blGraphics.js","./js/blx.js","./js/edtexport.js","./js/FileSaver.js","./js/i18n.js","./js/ltxinfo.js","./js/params.js","./js/qrscanner.js","./js/store.js","./js/ui.js","./lib/ltx-view/src/edt.js","./lib/ltx-view/src/i18n.js","./lib/ltx-view/src/iparam.js","./lib/ltx-view/src/ltx-view.css","./lib/ltx-view/src/ltx-view.js","./lib/ltx-view/src/series.js","./lib/ltx-view/src/view.js","./lib/ltx-view/vendor/uplot/uPlot.esm.js","./lib/ltx-view/vendor/uplot/uPlot.min.css","./static/favicon.ico","./static/favicon.svg","./static/ecotech-logo.svg","./static/ecotech-logo-neg.svg","./static/icons/bootstrap-icons.min.css","./static/icons/fonts/bootstrap-icons.woff","./static/icons/fonts/bootstrap-icons.woff2","./static/preview1024x768.png","./static/preview512.png"];function normalizedCacheUrl(t){var e,s=new URL(t);/\.woff2?$/.test(s.pathname)&&(s.search="");for(e of Array.from(s.searchParams.keys()))!e.startsWith("utm_")&&"fbclid"!==e||s.searchParams.delete(e);return s.href}self.addEventListener("install",function(t){t.waitUntil(caches.open(CACHE_NAME).then(function(t){return t.addAll(PRECACHE_URLS.map(function(t){return new Request(t,{cache:"reload"})}))}).then(function(){return self.skipWaiting()}))}),self.addEventListener("activate",function(t){t.waitUntil(caches.keys().then(function(t){return Promise.all(t.map(function(e){var t=e!==CACHE_NAME&&(e.startsWith(CACHE_PREFIX)||LEGACY_PREFIXES.some(function(t){return e.startsWith(t)})),s=e.startsWith("workbox-precache")&&e.endsWith(self.registration.scope);if(t||s)return caches.delete(e)}))}).then(function(){return self.clients.claim()}))}),self.addEventListener("fetch",function(t){let e=t.request;var s,i=new URL(e.url);"GET"===e.method&&i.origin===self.location.origin&&(s=new URL(self.registration.scope).pathname,"navigate"!==e.mode||i.pathname!==s&&i.pathname!==s+"index.html"?"navigate"!==e.mode&&t.respondWith(caches.match(normalizedCacheUrl(e.url)).then(function(t){return t||fetch(e)})):t.respondWith(caches.open(CACHE_NAME).then(function(t){return t.match(new URL("./index.html",self.registration.scope).href)}).then(function(t){return t||fetch(e)})))});
+/* Alte Adresse envilog.app/app/ (bis 2026-11-10): Abloese-Service-Worker. Wird von make/publish_pages.ps1
+ * nach /app/sw.js kopiert.
+ *
+ * Die alte App unter /app/ fragt beim Start und stuendlich sw.js ab und findet diesen Worker. Er uebernimmt sofort
+ * (skipWaiting), dadurch meldet die alte Seite "neue Version" (controllerchange -> bdOnSwUpdate: neu laden bzw. bei
+ * verbundenem Logger nur der Knopf "Update verfuegbar"). Er beantwortet keine Anfragen selbst, also kommt beim
+ * Neuladen die Weiterleitung /app/index.html -> envilog.app/ aus dem Netz. Danach meldet er sich ab.
+ * Alte Caches raeumt der neue Service Worker unter / auf (gleicher Cache-Praefix).
+ */
+self.addEventListener('install', function () {
+    self.skipWaiting();
+});
+
+self.addEventListener('activate', function (event) {
+    event.waitUntil(self.registration.unregister());
+});
