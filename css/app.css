@@ -87,9 +87,6 @@
     /* *** App Scaling ***  Einrueckung/Dyn. Elemente. Koennen gesetzt und gelesen werden. */
     /* Default Font: 16px == 1em, 0.5..2.0 OK */
     --fontrel: 1;
-    --scrollms: 200ms;
-    /* Maximalbreite Sidebar, so dass alles i.d.R. reinpasst */
-    --lnavwidth_max: calc(40px + var(--fontrel)*200px);
 
     /* Heights Header/Footer */
     --hdrheight: calc(20px + var(--fontrel)*32px);
@@ -576,14 +573,6 @@ progress {
     }
 }
 
-/*--- Spacer (separate Menue items) ---*/
-.jo-thin-hr {
-    border: 0;
-    height: 1px;
-    margin: 0.4em 0.5em;
-    background-color: var(--border);
-}
-
 /* Plaziert einen EIntrag in einer Flexbox (Mneues) rechts, z.B. fuer Menues */
 .jo-menu-right {
     margin-left: auto;
@@ -618,39 +607,9 @@ progress {
         background-color: var(--header-bg);
         color: var(--header-text);
         border-bottom: 3px solid var(--ci-teal);
-        padding: 0 0.75em 0 0.5em;
+        padding: 0 0.75em;
         height: var(--hdrheight);
         box-sizing: border-box;
-
-        /* Hamburger mit Richtungsanzeige (ui.js dreht .jo-main-hambind) */
-        .jo-main-hamb {
-            position: relative;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 2.3em;
-            height: 2.3em;
-            border-radius: 8px;
-            cursor: pointer;
-            color: var(--header-text);
-
-            &>i {
-                font-size: 1.55em;
-            }
-
-            .jo-main-hambind {
-                position: absolute;
-                bottom: 0.05em;
-                right: 0.05em;
-                font-size: 0.7em;
-                color: var(--header-muted);
-                rotate: 90deg;
-            }
-
-            &:hover {
-                background-color: rgba(255, 255, 255, 0.1);
-            }
-        }
 
         .jo-brand {
             display: flex;
@@ -680,6 +639,55 @@ progress {
                 color: var(--header-muted);
                 overflow: hidden;
                 text-overflow: ellipsis;
+
+                @media (max-width: 600px) {
+                    display: none;
+                }
+            }
+        }
+
+        /* Scan und Einstellungen rechts (Sprache, Schriftgroesse, Dunkelmodus) */
+        .bd-hdr-tools {
+            display: flex;
+            align-items: center;
+            gap: 0.4em;
+            flex-shrink: 0;
+
+            & .bd-hdr-btn,
+            & .bd-hdr-select {
+                min-height: 2.1em;
+                height: 2.1em;
+                padding: 0 0.6em;
+                font-size: 0.9em;
+                color: var(--header-text);
+                background-color: transparent;
+                border: 1px solid rgba(255, 255, 255, 0.28);
+                border-radius: 8px;
+                box-shadow: none;
+            }
+
+            & .bd-hdr-btn:hover,
+            & .bd-hdr-select:hover {
+                background-color: rgba(255, 255, 255, 0.1);
+            }
+
+            & .bd-hdr-select {
+                width: auto;
+                min-width: 0;
+                padding-right: 1.6em;
+                background-position: right 0.4em center;
+            }
+
+            & .bd-hdr-select option {
+                color: var(--text);
+                background-color: var(--surface);
+            }
+
+            /* Schmal: nur Symbol */
+            @media (max-width: 600px) {
+                & .bd-hdr-label {
+                    display: none;
+                }
             }
         }
     }
@@ -702,221 +710,43 @@ progress {
             min-height: auto;
             padding: 0.15em 0.6em;
         }
+
+        /* Firmenlogo rechts im Fuss (hell/dunkel ueber --logo) */
+        .bd-footer-logo {
+            height: 1.9em;
+            aspect-ratio: 264 / 85;
+            background: var(--logo) no-repeat center / contain;
+            flex-shrink: 0;
+        }
     }
 
-    .jo-chcontent {
+    /* ====== Inhalt ====== */
+    .jo-content {
+        flex: 1;
+        min-height: 0;
+        overflow: auto;
+        scroll-behavior: smooth;
+        background-color: var(--bg);
 
-        .jo-sidebarcontent {
+        .jo-user-section {
+            color: var(--text);
+            font-size: calc(1rem * var(--fontrel));
+            max-width: 76em;
+            margin: 0 auto;
+            padding: 1.25em 1.5em 0.5em 1.5em;
             display: flex;
+            flex-direction: column;
 
-            /* ====== Seitenleiste ====== */
-            .jo-sidebar {
-                height: calc(100svh - var(--hdrheight) - var(--ftrheight));
-                flex: 0 0 var(--lnavwidth_max);
-                transition: flex-basis var(--scrollms);
-                background-color: var(--surface);
-                border-right: 1px solid var(--border);
-                color: var(--text);
-                padding: 0.4em 0.35em;
-                box-sizing: border-box;
-                overflow: auto;
-                overflow-x: hidden;
-                display: flex;
-                flex-direction: column;
-
-                &>* {
-                    flex-shrink: 0;
-                }
-
-                /* Logo unten in der Leiste */
-                .jo-sidebar-logo {
-                    margin: auto 0.5em 0.3em;
-                    padding-top: 1.2em;
-                    aspect-ratio: 264 / 85;
-                    max-width: 12em;
-                    background: var(--logo) no-repeat center bottom / contain;
-                }
-
-                /* Small: Only Icons */
-                &.jo-sidebar-small {
-                    flex: 0 0 2.9em;
-                    padding: 0.4em 0.2em;
-
-                    @media (min-width:551px) {
-                        flex: 0 0 3.6em;
-                        padding: 0.4em 0.3em;
-                    }
-
-                    .jo-sibu {
-                        padding-left: 0.45em;
-                        padding-right: 0.2em;
-                    }
-
-                    /* Text invisible */
-                    span:nth-child(2) {
-                        color: rgba(0, 0, 0, 0);
-                    }
-
-                    .jo-sinavinfo {
-                        color: transparent;
-                        height: 0.4em;
-                        padding: 0;
-                    }
-
-                    .jo-sidebar-logo {
-                        display: none;
-                    }
-                }
-
-                /* Completely hidden */
-                &.jo-sidebar-hidden {
-                    display: none;
-                }
-
-                .jo-sinavinfo {
-                    padding: 0.9em 0.6em 0.3em 0.6em;
-                    color: var(--text-faint);
-                    font-size: 0.7em;
-                    font-weight: 700;
-                    text-transform: uppercase;
-                    letter-spacing: 0.06em;
-                    white-space: nowrap;
-                    overflow: hidden;
-                    text-overflow: ellipsis;
-                }
-
-                /* sibu: ***Side-Button*** */
-                .jo-sibu {
-                    display: flex;
-                    position: relative;
-                    align-items: center;
-                    flex-wrap: nowrap;
-                    margin: 1px 0;
-                    padding: 0.5em 0.6em;
-                    border-radius: 8px;
-                    cursor: pointer;
-                    white-space: nowrap;
-                    overflow: hidden;
-                    font-weight: 500;
-                    transition: background-color 0.12s;
-
-                    /* Icons im Button, nur direkte Kids, Icons in Buttons daher z.B. in span */
-                    &>i::before {
-                        font-size: 1.25em;
-                        vertical-align: -0.2em;
-                        margin-right: 0.75em;
-                    }
-
-                    &>i {
-                        color: var(--text-muted);
-                    }
-
-                    &.bleblue>i,
-                    &.green>i {
-                        color: inherit;
-                    }
-
-                    /* optionale Sub-Componente: Badge innerhalb eines jo-sibu */
-                    .jo-badge-span {
-                        position: absolute;
-                        background-color: var(--warn);
-                        color: #ffffff;
-                        top: 50%;
-                        translate: 0 -50%;
-                        right: 0.4em;
-                        border-radius: 999px;
-                        padding: 0.1em 0.45em;
-                        font-size: 0.75em;
-                        font-weight: 600;
-                        text-align: center;
-                        min-width: 1em;
-
-                        &.jo-badge-unimportant {
-                            background-color: var(--surface-3);
-                            color: var(--text-muted);
-
-                            .jo-sidebar-small & {
-                                display: none;
-                            }
-                        }
-
-                        /* Klein: nur Punkt am Symbol */
-                        .jo-sidebar-small & {
-                            top: 0.35em;
-                            translate: none;
-                            left: 1.5em;
-                            right: auto;
-                            padding: 0;
-                            font-size: 0.7em;
-                            max-width: 1.4em;
-                            overflow: hidden;
-
-                            .jo-badge-smallcircle & {
-                                color: rgba(0, 0, 0, 0);
-                                width: 0.9em;
-                                height: 0.9em;
-                                min-width: 0;
-                                border: 2px solid var(--surface);
-                            }
-                        }
-                    }
-
-                    &.jo-disabled {
-                        opacity: 0.45;
-                        cursor: not-allowed;
-                    }
-
-                    /* Bereich ist gerade sichtbar (checkViewportEnablers) */
-                    &.jo-active {
-                        background-color: var(--accent-soft);
-                        color: var(--accent);
-
-                        &>i {
-                            color: var(--accent);
-                        }
-                    }
-
-                    &:hover:not(.jo-disabled) {
-                        background-color: var(--surface-2);
-                    }
-                }
-
-                #nav-devicelist .jo-sibu {
-                    font-weight: 400;
-                    font-size: 0.92em;
-                }
+            @media (max-width: 600px) {
+                padding: 0.75em 0.75em 0.25em 0.75em;
             }
 
-            /* ====== Inhalt ====== */
-            .jo-content {
-                height: calc(100svh - var(--hdrheight) - var(--ftrheight));
-                flex: 1;
-                min-width: 0;
-                overflow: auto;
-                scroll-behavior: smooth;
-                background-color: var(--bg);
-
-                .jo-user-section {
-                    color: var(--text);
-                    font-size: calc(1rem * var(--fontrel));
-                    max-width: 76em;
-                    margin: 0 auto;
-                    padding: 1.25em 1.5em 0.5em 1.5em;
-                    display: flex;
-                    flex-direction: column;
-
-                    @media (max-width: 600px) {
-                        padding: 0.75em 0.75em 0.25em 0.75em;
-                    }
-
-                    & .jo-stdcanvas {
-                        height: calc((100svh - var(--hdrheight) - var(--ftrheight)) * 0.66);
-                        background-color: var(--surface);
-                        border: 1px solid var(--border);
-                        border-radius: var(--radius);
-                        overflow: hidden;
-                    }
-                }
+            & .jo-stdcanvas {
+                height: calc((100svh - var(--hdrheight) - var(--ftrheight)) * 0.66);
+                background-color: var(--surface);
+                border: 1px solid var(--border);
+                border-radius: var(--radius);
+                overflow: hidden;
             }
         }
     }
@@ -1466,16 +1296,16 @@ dialog {
     font-weight: 700;
 }
 
-/* Meldungen (Info, letzter Fehler) */
+/* Meldungen (Info, letzter Fehler): Fusszeile der Info-Karte */
 .bd-messages {
+    flex: 1 1 100%;
     display: flex;
     flex-direction: column;
     gap: 0.3em;
     font-size: 0.88em;
     color: var(--text-muted);
-    background-color: transparent;
-    box-shadow: none;
-    border-style: dashed;
+    border-top: 1px dashed var(--border);
+    padding-top: 0.7em;
 
     & i {
         margin-right: 0.3em;
@@ -1483,6 +1313,178 @@ dialog {
 
     & #blxCmdRes {
         color: var(--danger);
+    }
+}
+
+/* Bloecke der Hauptseite (Info, Aktionen, Messdaten, Erweitert): Ueberschrift + Inhalt */
+.bd-block {
+    margin-bottom: 0.6em;
+
+    & .bd-block-head,
+    & .bd-block-head h2 {
+        font-size: 1.1em;
+        font-weight: 650;
+        margin: 0.3em 0 0.6em 0;
+        display: flex;
+        align-items: center;
+        gap: 0.5em;
+
+        & i {
+            color: var(--text-muted);
+        }
+    }
+
+    & .jo-section-head.bd-block-head {
+        font-size: 1em;
+        justify-content: space-between;
+
+        & h2 {
+            margin: 0;
+        }
+    }
+}
+
+/* Kennwert ueber 2 Spalten (z.B. Speicher) */
+.bd-kv-wide {
+    grid-column: span 2;
+
+    @media (max-width: 600px) {
+        grid-column: 1 / -1;
+    }
+}
+
+/* Signalstaerke: Farbpunkt vor dem Wert (app.js setzt data-q) */
+#blxRssi[data-q]:not([data-q=""])::before {
+    content: '';
+    display: inline-block;
+    width: 0.55em;
+    height: 0.55em;
+    border-radius: 50%;
+    margin-right: 0.4em;
+    vertical-align: 0.05em;
+    background-color: var(--success);
+}
+
+#blxRssi[data-q="weak"]::before {
+    background-color: var(--warn);
+}
+
+#blxRssi[data-q="none"]::before {
+    background-color: var(--text-faint);
+}
+
+/* Messdaten: Laden in den Browser, darunter Tabelle/Grafik/Export */
+.bd-data {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+
+    & .bd-row {
+        margin-top: 0;
+    }
+
+    & .bd-data-sync {
+        gap: 0.5em 1em;
+    }
+}
+
+/* Geraete mit Daten in diesem Browser (Block Erweitert) */
+.bd-devlist-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.3em 1em;
+    margin-bottom: 0.6em;
+}
+
+.bd-devlist {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 15em), 1fr));
+    gap: 0.5em;
+}
+
+button.bd-devitem {
+    display: flex;
+    align-items: center;
+    gap: 0.6em;
+    text-align: left;
+    font-weight: 500;
+    min-width: 0;
+
+    & > span:first-of-type {
+        flex: 1;
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    & i {
+        color: var(--text-muted);
+    }
+
+    & .bd-devitem-n {
+        font-size: 0.8em;
+        font-weight: 400;
+        color: var(--text-muted);
+        white-space: nowrap;
+    }
+}
+
+/* Tabelle der Messdaten (edtexport.js tableDialog) */
+.bd-tabview {
+    width: min(1100px, calc(92vw - 2.8em));
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6em;
+
+    & .bd-form-row {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.5em 1em;
+
+        & select {
+            min-width: 0;
+            max-width: 100%;
+        }
+    }
+
+    @media (max-width: 600px) {
+        width: 100%;
+    }
+}
+
+.bd-tabwrap {
+    max-height: 62vh;
+    overflow: auto;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+
+    & .bd-datatab {
+        margin: 0;
+        border: 0;
+        border-radius: 0;
+
+        & th,
+        & td {
+            white-space: nowrap;
+        }
+    }
+
+    & thead th {
+        text-transform: none; /* Einheiten wie 'uS/cm' unveraendert */
+        position: sticky;
+        top: 0;
+        z-index: 1;
+        background-color: var(--surface-2);
+    }
+
+    & .bd-alarm {
+        color: var(--danger);
+        font-weight: 600;
     }
 }
 
@@ -1539,14 +1541,6 @@ dialog {
             flex: 1;
             min-width: 0;
         }
-    }
-
-    & .bd-setup-info {
-        font-size: 0.85em;
-        color: var(--text-muted);
-        display: flex;
-        flex-direction: column;
-        gap: 0.3em;
     }
 }
 
