@@ -149,30 +149,20 @@
                     </div>
                 </section>
 
-                <!-- 2. Aktionen: kompakte Knopfleiste, darunter die Messwerte (erst nach 'Messen').
+                <!-- 2. Aktionen: Zeile 1 Zeit/Messen/Internet, Zeile 2 Parameter/Speicher loeschen.
+                     Darunter je Aktion eine Ausgabe mit Ueberschrift (erst nach Benutzung sichtbar).
                      Sichtbarkeit der Elemente mit id steuert disabler() (display block/none). Erklaerungen als Tooltip. -->
                 <section id="bd-block-actions" class="bd-block" style="display:none">
                     <h2 class="bd-block-head" data-ll="Actions">Actions</h2>
                     <div class="bd-card bd-act">
                         <div class="bd-act-bar">
+                            <span id="blxSyncButtonSpan" class="bd-act-item" style="display:none">
+                                <button disabled id="blxSyncButton" data-llt="Sets the logger clock to the time of this device.">
+                                    <i class="bi-clock-history"></i> <span data-ll="Synchronize Time">Synchronize Time</span></button></span>
                             <!-- MEASURE for Loggers AND Sensors -->
                             <span id="blxMeasureSpan" class="bd-act-item" style="display:none">
                                 <button disabled id="blxMeasureButton" class="bd-primary" data-llt="Single measurement with current values.">
                                     <i class="bi-speedometer2"></i> <span data-ll="Measure">Measure</span></button></span>
-                            <span id="blxSyncButtonSpan" class="bd-act-item" style="display:none">
-                                <button disabled id="blxSyncButton" data-llt="Sets the logger clock to the time of this device.">
-                                    <i class="bi-clock-history"></i> <span data-ll="Synchronize Time">Synchronize Time</span></button></span>
-                            <span id="blxClearButtonSpan" class="bd-act-item bd-act-end" style="display:none">
-                                <button disabled id="blxClearButton" class="bd-danger" data-llt="Deletes all recorded data and starts a new recording.">
-                                    <i class="bi-trash3"></i> <span data-ll="Clear Memory">Clear Memory</span></button></span>
-                        </div>
-                        <!-- Konfiguration und Internet (nur Logger) -->
-                        <div class="bd-act-bar">
-                            <span id="blxParametersSpan" class="bd-act-item" style="display:none">
-                                <button disabled id="blxIParamsButton" data-llt="Intervals, internet, channels, units.">
-                                    <i class="bi-sliders"></i> <span data-ll="Device Parameter">Device Parameter</span></button>
-                                <button disabled id="blxChannelParamsButton" data-llt="Intervals, internet, channels, units.">
-                                    <i class="bi-list-columns"></i> <span data-ll="Channel Parameter">Channel Parameter</span></button></span>
                             <!-- Internet-Uebertragung: sendet 'i1' (bzw. '.lines 200' + 'i129'), nur Logger mit Modem -->
                             <span id="blxInetSpan" class="bd-act-item" style="display:none">
                                 <button disabled id="blxInetButton" data-llt="Send data to the server now (mobile network or LoRaWAN).">
@@ -182,9 +172,29 @@
                                     <span data-ll="Detailed diagnostic log">Detailed diagnostic log</span>
                                 </label></span>
                         </div>
-                        <!-- Messwerte: erscheint mit dem ersten 'Messen', waechst mit der Kanalzahl -->
+                        <!-- Konfiguration und Speicher (nur Logger) -->
+                        <div class="bd-act-bar">
+                            <span id="blxParametersSpan" class="bd-act-item" style="display:none">
+                                <button disabled id="blxIParamsButton" data-llt="Intervals, internet, channels, units.">
+                                    <i class="bi-sliders"></i> <span data-ll="Device Parameter">Device Parameter</span></button>
+                                <button disabled id="blxChannelParamsButton" data-llt="Intervals, internet, channels, units.">
+                                    <i class="bi-list-columns"></i> <span data-ll="Channel Parameter">Channel Parameter</span></button></span>
+                            <span id="blxClearButtonSpan" class="bd-act-item bd-act-end" style="display:none">
+                                <button disabled id="blxClearButton" class="bd-danger" data-llt="Deletes all recorded data and starts a new recording.">
+                                    <i class="bi-trash3"></i> <span data-ll="Clear Memory">Clear Memory</span></button></span>
+                        </div>
+                        <!-- Ausgaben der Aktionen, gleiche Reihenfolge wie die Knoepfe -->
+                        <div id="blxSyncResult" class="bd-meas-panel" hidden>
+                            <div class="bd-out-head" data-ll="Time synchronization">Time synchronization</div>
+                            <div id="blxSyncData">-</div>
+                        </div>
                         <div id="blxMeasureResult" class="bd-meas-panel" hidden>
+                            <div class="bd-out-head" data-ll="Measured values">Measured values</div>
                             <div id="blxMeasureData" class="bd-meas">-</div>
+                        </div>
+                        <div id="blxInetResult" class="bd-meas-panel" hidden>
+                            <div class="bd-out-head" data-ll="Internet transfer">Internet transfer</div>
+                            <div id="blxInetData">-</div>
                         </div>
                     </div>
                 </section>
