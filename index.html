@@ -134,7 +134,7 @@
                         <div class="bd-info-grid">
                             <div class="bd-kv"><span data-ll="Name">Name</span><b id="blxDeviceName">-</b></div>
                             <div class="bd-kv"><span>MAC</span><span id="blxMAC" class="bd-mono">-</span></div>
-                            <div class="bd-kv"><span data-ll="Type">Type</span><span id="blxType">-</span></div>
+                            <div class="bd-kv"><span data-ll="Type">Type</span><span id="blxType" class="bd-pre-line">-</span></div>
                             <div class="bd-kv"><span>Firmware</span><span id="blxFW">-</span></div>
                             <div class="bd-kv" data-llt="Bluetooth signal strength (RSSI)">
                                 <span data-ll="Signal">Signal</span><span id="blxRssi">-</span></div>
@@ -298,6 +298,11 @@
                 <div id="blxTerminal"></div>
             </div>
 
+            <!-- Firmenlogo unten links (hell/dunkel ueber --logo) -->
+            <div class="jo-user-section">
+                <div class="bd-logo" role="img" aria-label="ecoTech Monitoring"></div>
+            </div>
+
         </main>
 
         <!-- Rechte Teile im Footer wie im Header -->
@@ -318,8 +323,6 @@
             <span class="jo-menu-right"></span>
             <!-- id 'joInstallApp' wird von ui.js erwartet, per CSS zunaechst versteckt -->
             <button id="joInstallApp" data-ll="Install app">Install app</button>
-            <!-- Firmenlogo (hell/dunkel ueber --logo) -->
-            <span class="bd-footer-logo" role="img" aria-label="ecoTech Monitoring"></span>
 
         </footer>
     </div>

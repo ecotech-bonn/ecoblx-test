@@ -710,14 +710,6 @@ progress {
             min-height: auto;
             padding: 0.15em 0.6em;
         }
-
-        /* Firmenlogo rechts im Fuss (hell/dunkel ueber --logo) */
-        .bd-footer-logo {
-            height: 1.9em;
-            aspect-ratio: 264 / 85;
-            background: var(--logo) no-repeat center / contain;
-            flex-shrink: 0;
-        }
     }
 
     /* ====== Inhalt ====== */
@@ -1342,6 +1334,20 @@ dialog {
             margin: 0;
         }
     }
+}
+
+/* Typ: Name und Modemart in zwei Zeilen (app.js trennt mit Zeilenumbruch) */
+.bd-pre-line {
+    white-space: pre-line;
+}
+
+/* Firmenlogo unten links unter dem Terminal (wie frueher unten in der Seitenleiste) */
+.bd-logo {
+    width: 12em;
+    max-width: 60%;
+    aspect-ratio: 264 / 85;
+    margin: 0.5em 0 1em 0;
+    background: var(--logo) no-repeat left bottom / contain;
 }
 
 /* Kennwert ueber 2 Spalten (z.B. Speicher) */
