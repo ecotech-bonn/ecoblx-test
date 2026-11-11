@@ -1047,8 +1047,7 @@ dialog {
 
 /* ===================== 5. Hauptseite (index.html/app.js) ===================== */
 .bd-card,
-.bd-status,
-.bd-action {
+.bd-status {
     white-space: normal;
     background-color: var(--surface);
     border: 1px solid var(--border);
@@ -1195,48 +1194,72 @@ dialog {
     margin-top: 0.5em;
 }
 
-/* Aktionen: Karten-Raster (1 Spalte auf Mobiles) */
-.bd-actions {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(min(100%, 19em), 1fr));
-    gap: 1em;
-    margin-bottom: 1em;
+/* Aktionen/Messdaten/Erweitert: kompakte Knopfleiste in einer Karte (Erklaerungen als Tooltip) */
+.bd-act {
+    display: flex;
+    flex-direction: column;
+    gap: 0.7em;
+}
 
-    & .bd-action {
+.bd-act-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5em;
+
+    /* Gruppe (z.B. Geraete-/Kanalparameter): Knoepfe nebeneinander. disabler() setzt display block/none */
+    & .bd-act-item {
         display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 0.55em;
-        margin-bottom: 0;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.5em;
+    }
 
-        &>.bd-row {
-            margin-top: 0;
+    & .bd-act-item[style*="block"] {
+        display: flex !important;
+    }
+
+    /* Gefaehrliche Aktion (Speicher loeschen) abgesetzt rechts */
+    & .bd-act-end {
+        margin-left: auto;
+    }
+
+    /* Trenner zwischen Laden und Anzeigen (Messdaten) */
+    & .bd-act-sep {
+        width: 1px;
+        align-self: stretch;
+        background-color: var(--border);
+        margin: 0.2em 0.3em;
+    }
+
+    /* Zeile ohne sichtbare Elemente (z.B. Sensor ohne Parameter/Internet) ausblenden */
+    &:not(:has(> :not(.bd-act-item[style*="none"]))) {
+        display: none;
+    }
+
+    @media (max-width: 600px) {
+        & .bd-act-end {
+            margin-left: 0;
+        }
+
+        & .bd-act-sep {
+            display: none;
         }
     }
 }
 
-/* Ergebnis einer Aktion (Werte, Speicher, Zeit) */
-.bd-result {
-    align-self: stretch;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    gap: 0.2em 0.6em;
+/* Schalter neben einem Knopf (z.B. Diagnoseprotokoll) */
+.bd-small-label {
+    font-size: 0.86em;
+    color: var(--text-muted);
+}
+
+/* Messwerte unter der Knopfleiste */
+.bd-meas-panel {
     background-color: var(--surface-2);
     border-radius: 8px;
-    padding: 0.45em 0.7em;
+    padding: 0.55em 0.8em;
     font-size: 0.92em;
-    margin-top: auto;
-
-    &>.bd-result-label {
-        color: var(--text-muted);
-        font-size: 0.9em;
-    }
-
-    &>:last-child {
-        font-weight: 600;
-        font-variant-numeric: tabular-nums;
-    }
 }
 
 /* Messwerte: Kanal | Name | Wert */

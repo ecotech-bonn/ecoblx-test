@@ -129,7 +129,7 @@
 
                 <!-- 1. Info: Kennwerte des Geraets -->
                 <section class="bd-block">
-                    <h2 class="bd-block-head"><i class="bi-info-circle"></i> <span data-ll="Info">Info</span></h2>
+                    <h2 class="bd-block-head" data-ll="Info">Info</h2>
                     <div class="bd-card bd-device">
                         <div class="bd-info-grid">
                             <div class="bd-kv"><span data-ll="Name">Name</span><b id="blxDeviceName">-</b></div>
@@ -149,71 +149,54 @@
                     </div>
                 </section>
 
-                <!-- 2. Aktionen. Sichtbarkeit der Karten mit id steuert disabler() (display block/none) -->
+                <!-- 2. Aktionen: kompakte Knopfleiste, darunter die Messwerte (erst nach 'Messen').
+                     Sichtbarkeit der Elemente mit id steuert disabler() (display block/none). Erklaerungen als Tooltip. -->
                 <section id="bd-block-actions" class="bd-block" style="display:none">
-                    <h2 class="bd-block-head"><i class="bi-lightning"></i> <span data-ll="Actions">Actions</span></h2>
-                    <div class="bd-actions">
-                        <div id="blxSyncButtonSpan" class="bd-action" style="display:none">
-                            <button disabled id="blxSyncButton" class="bd-primary"><i class="bi-clock-history"></i>
-                                <span data-ll="Synchronize Time">Synchronize Time</span></button>
-                            <div class="bd-hint" data-ll="Sets the logger clock to the time of this device.">
-                                Sets the logger clock to the time of this device.</div>
+                    <h2 class="bd-block-head" data-ll="Actions">Actions</h2>
+                    <div class="bd-card bd-act">
+                        <div class="bd-act-bar">
+                            <!-- MEASURE for Loggers AND Sensors -->
+                            <span id="blxMeasureSpan" class="bd-act-item" style="display:none">
+                                <button disabled id="blxMeasureButton" class="bd-primary" data-llt="Single measurement with current values.">
+                                    <i class="bi-speedometer2"></i> <span data-ll="Measure">Measure</span></button></span>
+                            <span id="blxSyncButtonSpan" class="bd-act-item" style="display:none">
+                                <button disabled id="blxSyncButton" data-llt="Sets the logger clock to the time of this device.">
+                                    <i class="bi-clock-history"></i> <span data-ll="Synchronize Time">Synchronize Time</span></button></span>
+                            <span id="blxClearButtonSpan" class="bd-act-item bd-act-end" style="display:none">
+                                <button disabled id="blxClearButton" class="bd-danger" data-llt="Deletes all recorded data and starts a new recording.">
+                                    <i class="bi-trash3"></i> <span data-ll="Clear Memory">Clear Memory</span></button></span>
                         </div>
-
-                        <!-- MEASURE for Loggers AND Sensors -->
-                        <div id="blxMeasureSpan" class="bd-action" style="display:none">
-                            <button disabled id="blxMeasureButton" class="bd-primary"><i class="bi-speedometer2"></i>
-                                <span data-ll="Measure">Measure</span></button>
-                            <div class="bd-hint" data-ll="Single measurement with current values.">
-                                Single measurement with current values.</div>
-                            <div class="bd-result"><span class="bd-result-label" data-ll="Values">Values</span>
-                                <div id="blxMeasureData" class="bd-meas">-</div></div>
+                        <!-- Konfiguration und Internet (nur Logger) -->
+                        <div class="bd-act-bar">
+                            <span id="blxParametersSpan" class="bd-act-item" style="display:none">
+                                <button disabled id="blxIParamsButton" data-llt="Intervals, internet, channels, units.">
+                                    <i class="bi-sliders"></i> <span data-ll="Device Parameter">Device Parameter</span></button>
+                                <button disabled id="blxChannelParamsButton" data-llt="Intervals, internet, channels, units.">
+                                    <i class="bi-list-columns"></i> <span data-ll="Channel Parameter">Channel Parameter</span></button></span>
+                            <!-- Internet-Uebertragung: sendet 'i1' (bzw. '.lines 200' + 'i129'), nur Logger mit Modem -->
+                            <span id="blxInetSpan" class="bd-act-item" style="display:none">
+                                <button disabled id="blxInetButton" data-llt="Send data to the server now (mobile network or LoRaWAN).">
+                                    <i class="bi-cloud-arrow-up"></i> <span data-ll="Test Internet Transfer">Test Internet Transfer</span></button>
+                                <label id="blxInetDiagLabel" class="bd-check bd-small-label" data-llt="Includes modem commands (i129) with server and device details">
+                                    <input disabled checked type="checkbox" id="blxInetDiag" class="jo-switch">
+                                    <span data-ll="Detailed diagnostic log">Detailed diagnostic log</span>
+                                </label></span>
                         </div>
-
-                        <!-- Internet-Uebertragung: sendet 'i1' (bzw. '.lines 200' + 'i129'), nur Logger mit Modem -->
-                        <div id="blxInetSpan" class="bd-action" style="display:none">
-                            <button disabled id="blxInetButton" class="bd-primary"><i class="bi-cloud-arrow-up"></i>
-                                <span data-ll="Test Internet Transfer">Test Internet Transfer</span></button>
-                            <div class="bd-hint" data-ll="Send data to the server now (mobile network or LoRaWAN).">
-                                Send data to the server now (mobile network or LoRaWAN).</div>
-                            <label id="blxInetDiagLabel" class="bd-check bd-hint" data-llt="Includes modem commands (i129) with server and device details">
-                                <input disabled checked type="checkbox" id="blxInetDiag" class="jo-switch">
-                                <span data-ll="Detailed diagnostic log">Detailed diagnostic log</span>
-                            </label>
-                        </div>
-
-                        <div id="blxParametersSpan" class="bd-action" style="display:none">
-                            <div class="bd-row">
-                                <button disabled id="blxIParamsButton" class="bd-primary"><i class="bi-sliders"></i>
-                                    <span data-ll="Device Parameter">Device Parameter</span></button>
-                                <button disabled id="blxChannelParamsButton" class="bd-primary"><i class="bi-list-columns"></i>
-                                    <span data-ll="Channel Parameter">Channel Parameter</span></button>
-                            </div>
-                            <div class="bd-hint" data-ll="Intervals, internet, channels, units.">
-                                Intervals, internet, channels, units.</div>
-                        </div>
-
-                        <div id="blxClearButtonSpan" class="bd-action" style="display:none">
-                            <button disabled id="blxClearButton" class="bd-danger"><i class="bi-trash3"></i>
-                                <span data-ll="Clear Memory">Clear Memory</span></button>
-                            <div class="bd-hint" data-ll="Deletes all recorded data and starts a new recording.">
-                                Deletes all recorded data and starts a new recording.</div>
+                        <!-- Messwerte: erscheint mit dem ersten 'Messen', waechst mit der Kanalzahl -->
+                        <div id="blxMeasureResult" class="bd-meas-panel" hidden>
+                            <div id="blxMeasureData" class="bd-meas">-</div>
                         </div>
                     </div>
                 </section>
 
                 <!-- 3. Messdaten: erst in den Browser laden, dann Tabelle/Grafik/Export aus dem Browser-Speicher -->
                 <section id="bd-block-data" class="bd-block" style="display:none">
-                    <h2 class="bd-block-head"><i class="bi-database"></i> <span data-ll="Measurements">Measurements</span></h2>
-                    <div class="bd-card bd-data">
-                        <div class="bd-row bd-data-sync">
-                            <button disabled id="blxUploadButton" class="bd-primary"><i class="bi-arrow-down-circle"></i>
-                                <span data-ll="Sync to browser">Sync to browser</span></button>
-                            <span class="bd-hint" data-ll="Reads the recorded data from the logger into this browser.">
-                                Reads the recorded data from the logger into this browser.</span>
-                        </div>
-                        <div class="bd-hint" id="bd-data-state">-</div>
-                        <div class="bd-row">
+                    <h2 class="bd-block-head" data-ll="Measurements">Measurements</h2>
+                    <div class="bd-card bd-act">
+                        <div class="bd-act-bar">
+                            <button disabled id="blxUploadButton" class="bd-primary" data-llt="Reads the recorded data from the logger into this browser.">
+                                <i class="bi-arrow-down-circle"></i> <span data-ll="Sync to browser">Sync to browser</span></button>
+                            <span class="bd-act-sep" aria-hidden="true"></span>
                             <button disabled id="blxTableButton"><i class="bi-table"></i>
                                 <span data-ll="Table">Table</span></button>
                             <button disabled id="blxChartButton"><i class="bi-graph-up"></i>
@@ -221,50 +204,37 @@
                             <button disabled id="blxExportButton"><i class="bi-download"></i>
                                 <span data-ll="Export">Export</span></button>
                         </div>
+                        <div class="bd-hint" id="bd-data-state">-</div>
                     </div>
                 </section>
 
                 <!-- 4. Erweitert: alles Weitere, standardmaessig eingeklappt -->
                 <section class="bd-block">
                     <div class="jo-section-head bd-block-head">
-                        <h2><i class="bi-tools"></i> <span data-ll="Advanced">Advanced</span></h2>
+                        <h2 data-ll="Advanced">Advanced</h2>
                         <button id="button-toggle-advanced" class="jo-ghost" aria-expanded="true" data-llt="Show/hide">
                             <i class="bi-chevron-up"></i></button>
                     </div>
                     <div id="bd-advanced">
-                        <div class="bd-actions">
-                            <div id="blxInfoButtonSpan" class="bd-action" style="display:none">
-                                <button disabled id="blxInfoButton"><i class="bi-hdd"></i>
-                                    <span data-ll="Memory Info">Memory Info</span></button>
-                                <div class="bd-hint" data-ll="Reads the used logger memory again (shown under Info).">
-                                    Reads the used logger memory again (shown under Info).</div>
-                            </div>
-
-                            <div id="blxServiceSpan" class="bd-action" style="display:none">
-                                <button disabled id="blxServiceParametersButton"><i class="bi-wrench"></i>
-                                    <span data-ll="Service Parameter">Service Parameter</span></button>
-                                <div class="bd-hint" data-ll="System parameters and raw editor (service only).">
-                                    System parameters and raw editor (service only).</div>
-                            </div>
-
-                            <div class="bd-action">
+                        <div class="bd-card bd-act">
+                            <div class="bd-act-bar">
+                                <span id="blxInfoButtonSpan" class="bd-act-item" style="display:none">
+                                    <button disabled id="blxInfoButton" data-llt="Reads the used logger memory again (shown under Info).">
+                                        <i class="bi-hdd"></i> <span data-ll="Memory Info">Memory Info</span></button></span>
+                                <span id="blxServiceSpan" class="bd-act-item" style="display:none">
+                                    <button disabled id="blxServiceParametersButton" data-llt="System parameters and raw editor (service only).">
+                                        <i class="bi-wrench"></i> <span data-ll="Service Parameter">Service Parameter</span></button></span>
+                                <!-- RAW for Sensors Special Data (e.g. Radar-Raw)-->
+                                <span id="blxRawSpan" class="bd-act-item" style="display:none">
+                                    <button disabled id="blxRawButton" data-llt="Raw sensor signal (click again to stop).">
+                                        <i class="bi-activity"></i> <span data-ll="Raw Scan">Raw Scan</span></button></span>
+                                <!-- print Badge only for Factory Setup-->
+                                <span id="blxBadge" class="bd-act-item" style="display:none">
+                                    <button disabled id="blxBadgeButton"><i class="bi-printer"></i> Print Badge</button></span>
                                 <label class="bd-check" data-llt="Pitch shows the radio signal strength (helps to find the logger)">
                                     <input disabled type="checkbox" id="blxEcholot" class="jo-switch">
                                     <i class="bi-broadcast"></i> <span data-ll="Locate logger (signal tone)">Locate logger (signal tone)</span>
                                 </label>
-                            </div>
-
-                            <!-- RAW for Sensors Special Data (e.g. Radar-Raw)-->
-                            <div id="blxRawSpan" class="bd-action" style="display:none">
-                                <button disabled id="blxRawButton"><i class="bi-activity"></i>
-                                    <span data-ll="Raw Scan">Raw Scan</span></button>
-                                <div class="bd-hint" data-ll="Raw sensor signal (click again to stop).">
-                                    Raw sensor signal (click again to stop).</div>
-                            </div>
-
-                            <div id="blxBadge" class="bd-action" style="display:none">
-                                <!-- print Badge only for Factory Setup-->
-                                <button disabled id="blxBadgeButton"><i class="bi-printer"></i> Print Badge</button>
                             </div>
                         </div>
 
