@@ -129,7 +129,7 @@
 
                 <!-- 1. Info: Kennwerte des Geraets -->
                 <section class="bd-block">
-                    <h2 class="bd-block-head" data-ll="Info">Info</h2>
+                    <div class="bd-block-head"><h2 data-ll="Info">Info</h2></div>
                     <div class="bd-card bd-device">
                         <div class="bd-info-grid">
                             <div class="bd-kv"><span data-ll="Name">Name</span><b id="blxDeviceName">-</b></div>
@@ -153,23 +153,31 @@
                      Darunter je Aktion eine Ausgabe mit Ueberschrift (erst nach Benutzung sichtbar).
                      Sichtbarkeit der Elemente mit id steuert disabler() (display block/none). Erklaerungen als Tooltip. -->
                 <section id="bd-block-actions" class="bd-block" style="display:none">
-                    <h2 class="bd-block-head" data-ll="Actions">Actions</h2>
+                    <div class="bd-block-head"><h2 data-ll="Actions">Actions</h2></div>
                     <div class="bd-card bd-act">
                         <div class="bd-act-bar">
                             <span id="blxSyncButtonSpan" class="bd-act-item" style="display:none">
                                 <button disabled id="blxSyncButton" data-llt="Sets the logger clock to the time of this device.">
                                     <i class="bi-clock-history"></i> <span data-ll="Synchronize Time">Synchronize Time</span></button></span>
-                            <!-- MEASURE for Loggers AND Sensors -->
+                            <!-- MEASURE for Loggers AND Sensors: 'e 1', mit Schalter 'Messung speichern' (nur Logger) 'e 3' -->
                             <span id="blxMeasureSpan" class="bd-act-item" style="display:none">
-                                <button disabled id="blxMeasureButton" class="bd-primary" data-llt="Single measurement with current values.">
-                                    <i class="bi-speedometer2"></i> <span data-ll="Measure">Measure</span></button></span>
-                            <!-- Internet-Uebertragung: sendet 'i1' (bzw. '.lines 200' + 'i129'), nur Logger mit Modem -->
+                                <button disabled id="blxMeasureButton" data-llt="Single measurement with current values.">
+                                    <i class="bi-speedometer2"></i> <span data-ll="Measure">Measure</span></button>
+                                <label id="blxMeasureLogLabel" class="bd-check bd-small-label" data-llt="Also stores the measurement in the logger memory (e 3)">
+                                    <input disabled type="checkbox" id="blxMeasureLog" class="jo-switch">
+                                    <span data-ll="Log measurement">Log measurement</span>
+                                </label></span>
+                            <!-- Internet-Uebertragung: sendet 'i1' (bzw. '.lines 200' + 'i129'/'i131'), nur Logger mit Modem -->
                             <span id="blxInetSpan" class="bd-act-item" style="display:none">
                                 <button disabled id="blxInetButton" data-llt="Send data to the server now (mobile network or LoRaWAN).">
                                     <i class="bi-cloud-arrow-up"></i> <span data-ll="Test Internet Transfer">Test Internet Transfer</span></button>
                                 <label id="blxInetDiagLabel" class="bd-check bd-small-label" data-llt="Includes modem commands (i129) with server and device details">
                                     <input disabled checked type="checkbox" id="blxInetDiag" class="jo-switch">
                                     <span data-ll="Detailed diagnostic log">Detailed diagnostic log</span>
+                                </label>
+                                <label id="blxInetLongLabel" class="bd-check bd-small-label" data-llt="Longer network search, includes the diagnostic log (i131)">
+                                    <input disabled type="checkbox" id="blxInetLong" class="jo-switch">
+                                    <span data-ll="Longer network search">Longer network search</span>
                                 </label></span>
                         </div>
                         <!-- Konfiguration und Speicher (nur Logger) -->
@@ -201,7 +209,7 @@
 
                 <!-- 3. Messdaten: erst in den Browser laden, dann Tabelle/Grafik/Export aus dem Browser-Speicher -->
                 <section id="bd-block-data" class="bd-block" style="display:none">
-                    <h2 class="bd-block-head" data-ll="Measurements">Measurements</h2>
+                    <div class="bd-block-head"><h2 data-ll="Measurements">Measurements</h2></div>
                     <div class="bd-card bd-act">
                         <div class="bd-act-bar">
                             <button disabled id="blxUploadButton" class="bd-primary" data-llt="Reads the recorded data from the logger into this browser.">
@@ -218,11 +226,11 @@
                     </div>
                 </section>
 
-                <!-- 4. Erweitert: alles Weitere, standardmaessig eingeklappt -->
+                <!-- 4. Erweitert: alles Weitere, standardmaessig eingeklappt (ganze Kopfzeile klickbar) -->
                 <section class="bd-block">
-                    <div class="jo-section-head bd-block-head">
+                    <div id="bd-advanced-head" class="bd-block-head bd-block-toggle">
                         <h2 data-ll="Advanced">Advanced</h2>
-                        <button id="button-toggle-advanced" class="jo-ghost" aria-expanded="true" data-llt="Show/hide">
+                        <button id="button-toggle-advanced" class="jo-ghost" aria-expanded="true" aria-controls="bd-advanced" data-llt="Show/hide">
                             <i class="bi-chevron-up"></i></button>
                     </div>
                     <div id="bd-advanced">
@@ -269,13 +277,22 @@
                 </div>
             </div>
 
+            <!-- Terminal als Block wie oben, standardmaessig eingeklappt (ganze Kopfzeile klickbar) -->
             <div id="section_terminal" class="jo-user-section">
-                <div class="jo-section-head">
-                    <h2><i class="bi-terminal"></i> <span data-ll="Terminal">Terminal</span></h2>
-                    <button id="button-toggle-terminal" class="jo-ghost" aria-expanded="true" data-llt="Show/hide terminal">
-                        <i class="bi-chevron-up"></i></button>
-                </div>
-                <div id="blxTerminal"></div>
+                <section class="bd-block bd-block-term">
+                    <div id="bd-terminal-head" class="bd-block-head bd-block-toggle">
+                        <h2><i class="bi-terminal"></i> <span data-ll="Terminal">Terminal</span></h2>
+                        <span class="bd-head-tools">
+                            <label id="bd-term-stick-label" class="bd-check bd-small-label" data-llt="Always show the newest output">
+                                <input type="checkbox" id="bd-term-stick" class="jo-switch">
+                                <span data-ll="Stick to bottom">Stick to bottom</span>
+                            </label>
+                            <button id="button-toggle-terminal" class="jo-ghost" aria-expanded="true" aria-controls="blxTerminal" data-llt="Show/hide terminal">
+                                <i class="bi-chevron-up"></i></button>
+                        </span>
+                    </div>
+                    <div id="blxTerminal"></div>
+                </section>
             </div>
 
             <!-- Firmenlogo unten links (hell/dunkel ueber --logo) -->

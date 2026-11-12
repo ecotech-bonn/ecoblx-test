@@ -1,2 +1,2 @@
-ltx-view, Commit f6ccf49
+ltx-view, Commit eb8e11d
 Nicht hier bearbeiten: Quelle ist das Repo ltx-view, Abgleich mit make\sync_ltxview.ps1

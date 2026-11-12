@@ -1340,32 +1340,82 @@ dialog {
     }
 }
 
-/* Bloecke der Hauptseite (Info, Aktionen, Messdaten, Erweitert): Ueberschrift + Inhalt */
+/* Bloecke der Hauptseite (Info, Aktionen, Messdaten, Erweitert, Terminal): ein Kasten mit Kopfzeile innen.
+   Innere .bd-card sind nur noch Abschnitte (ohne eigenen Rahmen), mehrere durch eine Linie getrennt. */
 .bd-block {
-    margin-bottom: 0.6em;
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-sm);
+    margin-bottom: 1em;
+    overflow: hidden;
 
-    & .bd-block-head,
-    & .bd-block-head h2 {
-        font-size: 1.1em;
-        font-weight: 650;
-        margin: 0.3em 0 0.6em 0;
+    & .bd-block-head {
         display: flex;
         align-items: center;
-        gap: 0.5em;
-
-        & i {
-            color: var(--text-muted);
-        }
-    }
-
-    & .jo-section-head.bd-block-head {
-        font-size: 1em;
         justify-content: space-between;
+        gap: 0.5em;
+        min-height: 2.6em;
+        padding: 0.45em 0.7em 0.15em 1.1em;
 
         & h2 {
+            font-size: 1.1em;
+            font-weight: 650;
             margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5em;
+
+            & i {
+                color: var(--text-muted);
+            }
         }
     }
+
+    /* Einklappbar: ganze Kopfzeile ist Schalter (Kasten bleibt sichtbar) */
+    & .bd-block-toggle {
+        cursor: pointer;
+        user-select: none;
+
+        &:hover {
+            background-color: var(--surface-2);
+        }
+    }
+
+    &.bd-collapsed .bd-block-head {
+        padding-bottom: 0.45em;
+    }
+
+    & .bd-card {
+        background-color: transparent;
+        border: none;
+        border-radius: 0;
+        box-shadow: none;
+        margin: 0;
+        padding: 0.6em 1.1em 1em 1.1em;
+    }
+
+    & .bd-card+.bd-card {
+        border-top: 1px solid var(--border);
+        padding-top: 0.9em;
+    }
+}
+
+/* Werkzeuge rechts in der Kopfzeile (Terminal: Schalter + Aufklappen) */
+.bd-head-tools {
+    display: flex;
+    align-items: center;
+    gap: 0.6em;
+    cursor: auto;
+}
+
+/* Terminal-Block: dunkler Bereich fuellt den Kasten unter der Kopfzeile */
+#section_terminal {
+    padding-top: 0;
+}
+
+.bd-block-term .bd-block-head {
+    padding-bottom: 0.45em;
 }
 
 /* Typ: Name und Modemart in zwei Zeilen (app.js trennt mit Zeilenumbruch) */
@@ -1707,10 +1757,7 @@ button.bd-devitem {
 /* blx.js baut das Terminal mit Inline-Styles, daher hier teils !important */
 #blxTerminal {
     background-color: #0d1117;
-    border-radius: var(--radius);
     overflow: hidden;
-    box-shadow: var(--shadow-sm);
-    margin-bottom: 1em;
 }
 
 #blxTerminalOut {
