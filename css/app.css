@@ -789,6 +789,19 @@ progress {
     }
 }
 
+/* Service-Modus aktiv (Terminal '.service'), Klick beendet */
+button.bd-service {
+    min-height: 0;
+    padding: 0.1em 0.6em;
+    margin-left: 0.6em;
+    border: 1px solid var(--warn);
+    border-radius: 999px;
+    background-color: var(--warn-soft);
+    color: var(--warn);
+    font-size: 0.85em;
+    font-weight: 600;
+}
+
 /* ===================== 4. Dialoge ===================== */
 dialog {
     position: relative;
@@ -2024,6 +2037,11 @@ button.pf-warns {
 
     & select {
         max-width: 8.5em;
+    }
+
+    & select.pf-dur-unit {
+        flex: none;
+        width: 4.6em;
     }
 }
 

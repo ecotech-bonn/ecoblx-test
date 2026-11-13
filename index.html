@@ -242,6 +242,10 @@
                                 <span id="blxServiceSpan" class="bd-act-item" style="display:none">
                                     <button disabled id="blxServiceParametersButton" data-llt="System parameters and raw editor (service only).">
                                         <i class="bi-wrench"></i> <span data-ll="Service Parameter">Service Parameter</span></button></span>
+                                <!-- Service-Modus beenden (Terminal '.service'), nur sichtbar solange aktiv -->
+                                <span id="blxServiceEndSpan" class="bd-act-item" style="display:none">
+                                    <button id="blxServiceEndButton" data-llt="Hides the service fields in the parameter editors again.">
+                                        <i class="bi-shield-lock"></i> <span data-ll="End service">End service</span></button></span>
                                 <!-- RAW for Sensors Special Data (e.g. Radar-Raw)-->
                                 <span id="blxRawSpan" class="bd-act-item" style="display:none">
                                     <button disabled id="blxRawButton" data-llt="Raw sensor signal (click again to stop).">
@@ -302,6 +306,7 @@
             <div>
                 <span id="bd-online" hidden class="bd-net bd-net-on" data-llt="Internet of this device (not the transfer of the logger)">Online</span>
                 <span id="bd-offline" hidden class="bd-net bd-net-off">Offline</span>
+                <button hidden id="bd-service" class="bd-service" data-llt="Service mode active (ends on reload). Click to end."><i class="bi-wrench"></i> Service</button>
             </div>
 
             <div id="blxAutoPIN" class="red back-white jo-padding-s" style="display:none;">
