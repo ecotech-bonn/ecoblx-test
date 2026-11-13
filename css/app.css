@@ -1918,14 +1918,6 @@ select.pf-invalid,
     }
 }
 
-.pf-adv-toggle {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.55em;
-    cursor: pointer;
-    user-select: none;
-}
-
 .pf-changes {
     color: var(--text-faint);
 }
@@ -1940,6 +1932,7 @@ select.pf-invalid,
 
 .pf-tb-right {
     display: flex;
+    margin-left: auto;
     flex-wrap: wrap;
     align-items: center;
     gap: 0.4em 0.6em;
@@ -2351,24 +2344,31 @@ button.pf-remove {
     }
 }
 
-/* Erweiterte Einstellungen (Service): nur sichtbar mit Haken 'pf-show-adv' */
-.pf-editor:not(.pf-show-adv) .pf-adv {
-    display: none;
+/* Kanal-Details: Themen (Sensor, Umrechnung, Alarme, Speicherung) als dezente Kaesten nebeneinander */
+.pf-boxes {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(24em, 100%), 1fr));
+    gap: 0.7em;
+    padding-top: 0.7em;
 }
 
-.pf-subhead {
-    font-size: 0.72em;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--text-faint);
-    margin: 1em 0 0.6em 0;
-    border-top: 1px solid var(--border);
-    padding-top: 0.8em;
-}
+.pf-group.pf-box {
+    margin: 0;
+    padding: 0.6em 0.8em 0.8em 0.8em;
 
-.pf-detail .pf-grid {
-    background-color: transparent;
+    & legend {
+        margin-bottom: 0.5em;
+        font-size: 0.78em;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: var(--text-muted);
+    }
+
+    & .pf-grid {
+        grid-template-columns: repeat(auto-fill, minmax(min(12em, 100%), 1fr));
+        gap: 0.7em 1em;
+    }
 }
 
 .pf-note {
