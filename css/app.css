@@ -1293,9 +1293,10 @@ dialog {
     }
 }
 
-/* Messwerte: Kanal | Name | Wert */
+/* Messwerte: Kanal | Name | Wert (begrenzte Breite, damit Name und Wert zusammen lesbar bleiben) */
 .bd-meas {
     flex: 1 1 100%;
+    max-width: 34em;
     font-weight: 400 !important;
 
     & .bd-mhead {
@@ -1334,6 +1335,11 @@ dialog {
         &.bd-mv-alarm b {
             color: var(--danger);
         }
+
+        &.bd-mv-err b {
+            color: var(--warn);
+            font-weight: 600;
+        }
     }
 }
 
@@ -1357,7 +1363,7 @@ dialog {
         margin-right: 0.3em;
     }
 
-    & #blxCmdRes {
+    & #blxCmdRes.bd-err {
         color: var(--danger);
     }
 }
