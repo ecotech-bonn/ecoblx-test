@@ -1858,10 +1858,16 @@ button.bd-devitem {
     flex-direction: column;
     min-width: 0;
 
-    & > label {
+    & > .pf-lab {
+        display: flex;
+        align-items: center;
+        gap: 0.3em;
+        margin-bottom: 0.3em;
+    }
+
+    & > .pf-lab > label {
         font-size: 0.85em;
         font-weight: 600;
-        margin-bottom: 0.3em;
     }
 
     & > input,
@@ -1875,11 +1881,41 @@ button.bd-devitem {
     color: var(--text-faint);
 }
 
+/* Unter dem Feld: nur Fehler/Warnung */
 .pf-hint {
     font-size: 0.76em;
     color: var(--text-muted);
-    min-height: 1.1em;
     margin-top: 0.25em;
+
+    &:empty {
+        display: none;
+    }
+}
+
+/* Info-Knopf neben der Beschriftung, klappt die Erklaerung auf */
+button.pf-info {
+    min-height: 0;
+    padding: 0 0.15em;
+    border: none;
+    background: none;
+    color: var(--text-faint);
+    font-size: 0.85em;
+    line-height: 1;
+    cursor: pointer;
+
+    &:hover,
+    &.pf-info-on {
+        color: var(--accent);
+    }
+}
+
+.pf-itxt {
+    font-size: 0.76em;
+    color: var(--text-muted);
+    background-color: var(--surface-2);
+    border-radius: 6px;
+    padding: 0.35em 0.6em;
+    margin-top: 0.3em;
 }
 
 .pf-hint.pf-err {
@@ -2025,18 +2061,14 @@ button.pf-warns {
     font-weight: 600;
 }
 
-/* Rohwert plus Auswahl gaengiger Werte */
-.pf-field > .pf-pre {
+/* Zeitfeld: Wert plus Einheit (s/min/h/d) */
+.pf-field > .pf-dur {
     display: flex;
     gap: 0.4em;
 
     & input {
         flex: 1;
         min-width: 0;
-    }
-
-    & select {
-        max-width: 8.5em;
     }
 
     & select.pf-dur-unit {
@@ -2362,10 +2394,10 @@ button.pf-remove {
     }
 }
 
-/* Kanal-Details: Themen (Sensor, Umrechnung, Alarme, Speicherung) als dezente Kaesten nebeneinander */
+/* Kanal-Details: Themen (Sensor, Umrechnung, Alarme, Speicherung) als dezente Kaesten untereinander, volle Breite */
 .pf-boxes {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(min(24em, 100%), 1fr));
+    grid-template-columns: 1fr;
     gap: 0.7em;
     padding-top: 0.7em;
 }
