@@ -1051,6 +1051,15 @@ dialog {
     }
 }
 
+/* Knopf im Hinweis (z.B. 'Logger auswaehlen'), Hinweisleiste selbst laesst Klicks durch */
+.jo-toast .bd-toast-btn {
+    pointer-events: auto;
+    min-height: 0;
+    margin-left: 0.4em;
+    padding: 0.25em 0.7em;
+    font-size: 0.9em;
+}
+
 @keyframes jotoastin {
     from {
         opacity: 0;
