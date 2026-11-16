@@ -127,8 +127,8 @@
                     </div>
                 </div>
 
-                <!-- 1. Info: Kennwerte des Geraets -->
-                <section class="bd-block">
+                <!-- 1. Info: Kennwerte des Geraets. Sichtbar nur mit Inhalt (app.js bdInfoVisibility) -->
+                <section id="bd-block-info" class="bd-block">
                     <div class="bd-block-head"><h2 data-ll="Info">Info</h2></div>
                     <div class="bd-card bd-device">
                         <div class="bd-info-grid">
@@ -183,9 +183,9 @@
                         <!-- Konfiguration und Speicher (nur Logger) -->
                         <div class="bd-act-bar">
                             <span id="blxParametersSpan" class="bd-act-item" style="display:none">
-                                <button disabled id="blxIParamsButton" data-llt="Intervals, internet, channels, units.">
+                                <button disabled id="blxIParamsButton" data-llt="Name, time zone, measuring and internet intervals, internal values.">
                                     <i class="bi-sliders"></i> <span data-ll="Device Parameter">Device Parameter</span></button>
-                                <button disabled id="blxChannelParamsButton" data-llt="Intervals, internet, channels, units.">
+                                <button disabled id="blxChannelParamsButton" data-llt="Sensors, units, conversion and alarms per channel.">
                                     <i class="bi-list-columns"></i> <span data-ll="Channel Parameter">Channel Parameter</span></button></span>
                             <span id="blxClearButtonSpan" class="bd-act-item bd-act-end" style="display:none">
                                 <button disabled id="blxClearButton" class="bd-danger" data-llt="Deletes all recorded data and starts a new recording.">
