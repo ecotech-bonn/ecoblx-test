@@ -2179,7 +2179,7 @@ dialog .pf-editor.pf-chan-editor {
     border-spacing: 0;
     table-layout: fixed;
     width: 100%;
-    min-width: 56em;
+    min-width: 52em;
     font-size: 0.94em;
 
     & .pf-col-tog {
@@ -2190,16 +2190,8 @@ dialog .pf-editor.pf-chan-editor {
         width: 4.2em;
     }
 
-    & .pf-col-mode {
-        width: 9em;
-    }
-
     & .pf-col-sdi {
         width: 4.6em;
-    }
-
-    & .pf-col-cmd {
-        width: 4.8em;
     }
 
     & .pf-col-idx {
@@ -2219,7 +2211,7 @@ dialog .pf-editor.pf-chan-editor {
     }
 
     & .pf-col-act {
-        width: 4.6em;
+        width: 8.6em;
     }
 
     & thead {
@@ -2358,6 +2350,70 @@ dialog .pf-editor.pf-chan-editor {
     & .pf-detail > td {
         padding: 0.7em 0.9em 0.9em 6.5em;
         background-color: var(--surface-2);
+    }
+}
+
+/* Kasten je Sensor: Messkanal, seine Cache-Werte und darunter der Knopf fuer einen weiteren Wert.
+   Zwischen den Kaesten eine Leerzeile. Rahmen ueber die Zellen (Tabelle), schmal sind die Kanaele Karten */
+.pf-table .pf-grp-gap > tr > td {
+    height: 0.6em;
+    padding: 0;
+}
+
+.pf-table .pf-grp-foot > tr > td {
+    padding: 0.15em 0.4em 0.3em 2.6em;
+}
+
+button.pf-addval {
+    min-height: 0;
+    padding: 0.2em 0.7em;
+    font-size: 0.86em;
+    border: 1px dashed transparent;
+    background: none;
+    box-shadow: none;
+    color: var(--accent);
+
+    &:hover:not(:disabled) {
+        background-color: var(--accent-soft);
+        border-color: var(--accent);
+    }
+}
+
+button.pf-move:disabled {
+    opacity: 0.25;
+}
+
+@container (min-width: 860.01px) {
+    dialog .pf-editor.pf-chan-editor {
+        padding: 0 0.5em 0.5em 0.5em;
+    }
+
+    .pf-table tbody.pf-chan > tr > td:first-child,
+    .pf-table tbody.pf-grp-foot > tr > td {
+        border-left: 1px solid var(--border-strong);
+    }
+
+    .pf-table tbody.pf-chan > tr > td:last-child,
+    .pf-table tbody.pf-grp-foot > tr > td {
+        border-right: 1px solid var(--border-strong);
+    }
+
+    .pf-table tbody.pf-g-first > .pf-row > td {
+        border-top: 1px solid var(--border-strong);
+    }
+
+    .pf-table tbody.pf-g-first > .pf-row > td:first-child {
+        border-top-left-radius: var(--radius);
+    }
+
+    .pf-table tbody.pf-g-first > .pf-row > td:last-child {
+        border-top-right-radius: var(--radius);
+    }
+
+    .pf-table tbody.pf-grp-foot > tr > td {
+        border-bottom: 1px solid var(--border-strong);
+        border-radius: 0 0 var(--radius) var(--radius);
+        background-color: var(--surface);
     }
 }
 
@@ -2613,6 +2669,22 @@ button.pf-noteline {
             margin-left: 1.2em;
         }
 
+        & tbody.pf-grp-gap {
+            display: none;
+        }
+
+        & tbody.pf-grp-foot {
+            border: none;
+            background: none;
+            margin: 0 0 1.1em 1.2em;
+
+            & > tr,
+            & > tr > td {
+                display: block;
+                padding: 0;
+            }
+        }
+
         & .pf-row {
             display: grid;
             grid-template-columns: 2em repeat(12, minmax(0, 1fr));
@@ -2645,32 +2717,28 @@ button.pf-noteline {
         }
 
         & .pf-row > .pf-c-no {
-            grid-column: span 3;
+            grid-column: 2 / span 8;
             align-self: center;
         }
 
-        & .pf-row > .pf-c-mode {
-            grid-column: span 6;
-        }
-
-        & .pf-row > .pf-c-act {
-            grid-column: 11 / span 3;
+        /* tbody.pf-chan: staerker als die Ruecksetzregel oben (Hover/Fokus/Messkanal), Knoepfe bleiben rechts */
+        & tbody.pf-chan > .pf-row > td.pf-c-act {
+            grid-column: 10 / span 4;
             grid-row: 1;
             align-self: center;
             text-align: right;
         }
 
-        & .pf-row > .pf-c-sdi,
-        & .pf-row > .pf-c-cmd {
-            grid-column: span 3;
+        & .pf-row > .pf-c-sdi {
+            grid-column: span 4;
         }
 
         & .pf-row > .pf-c-idx {
-            grid-column: span 2;
+            grid-column: span 3;
         }
 
         & .pf-row > .pf-c-unit {
-            grid-column: span 4;
+            grid-column: span 5;
         }
 
         & .pf-row > .pf-c-num {
