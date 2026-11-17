@@ -149,7 +149,7 @@
                     </div>
                 </section>
 
-                <!-- 2. Aktionen: Zeile 1 Zeit/Messen/Internet, Zeile 2 Speicherinfo/Werkseinstellungen/Raw/Orten/Speicher loeschen.
+                <!-- 2. Aktionen: Zeile 1 Zeit/Messen/Internet, Zeile 2 Speicherinfo/Werkseinstellungen/Raw/Speicher loeschen.
                      Darunter je Aktion eine Ausgabe mit Ueberschrift (erst nach Benutzung sichtbar).
                      Sichtbarkeit der Elemente mit id steuert disabler() (display block/none). Erklaerungen als Tooltip. -->
                 <section id="bd-block-actions" class="bd-block" style="display:none">
@@ -180,7 +180,7 @@
                                     <span data-ll="Longer network search">Longer network search</span>
                                 </label></span>
                         </div>
-                        <!-- Speicherinfo, Werkseinstellungen (nur Logger), Raw (Sensoren), Orten; Speicher loeschen rechts -->
+                        <!-- Speicherinfo, Werkseinstellungen (nur Logger), Raw (Sensoren); Speicher loeschen rechts -->
                         <div class="bd-act-bar">
                             <span id="blxInfoButtonSpan" class="bd-act-item" style="display:none">
                                 <button disabled id="blxInfoButton" data-llt="Reads the used logger memory again (shown under Info).">
@@ -195,10 +195,6 @@
                             <!-- print Badge only for Factory Setup-->
                             <span id="blxBadge" class="bd-act-item" style="display:none">
                                 <button disabled id="blxBadgeButton"><i class="bi-printer"></i> Print Badge</button></span>
-                            <label class="bd-check" data-llt="Pitch shows the radio signal strength (helps to find the logger)">
-                                <input disabled type="checkbox" id="blxEcholot" class="jo-switch">
-                                <i class="bi-broadcast"></i> <span data-ll="Locate logger (signal tone)">Locate logger (signal tone)</span>
-                            </label>
                             <span id="blxClearButtonSpan" class="bd-act-item bd-act-end" style="display:none">
                                 <button disabled id="blxClearButton" class="bd-danger" data-llt="Deletes all recorded data and starts a new recording.">
                                     <i class="bi-trash3"></i> <span data-ll="Clear Memory">Clear Memory</span></button></span>
