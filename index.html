@@ -259,20 +259,19 @@
                     </div>
                 </section>
 
-                <!-- 5. Im Browser gespeichert: Geraete mit Daten in diesem Browser, standardmaessig eingeklappt (ganze Kopfzeile
+                <!-- 5. Gespeicherte Geraetedaten: Geraete mit Daten in diesem Browser, standardmaessig eingeklappt (ganze Kopfzeile
                      klickbar). ids bd-advanced* und localStorage-Key bleiben (Zustand Ein-/Ausklappen) -->
                 <section class="bd-block">
                     <div id="bd-advanced-head" class="bd-block-head bd-block-toggle">
-                        <h2 data-ll="Stored in browser">Stored in browser</h2>
+                        <h2 data-ll="Stored device data">Stored device data</h2>
                         <button id="button-toggle-advanced" class="jo-ghost" aria-expanded="true" aria-controls="bd-advanced" data-llt="Show/hide">
                             <i class="bi-chevron-up"></i></button>
                     </div>
                     <div id="bd-advanced">
                         <!-- Geraete mit Daten in diesem Browser (frueher Seitenleiste), gefuellt von app.js -->
                         <div class="bd-card">
-                            <div class="bd-devlist-head"><b data-ll="Devices in this browser">Devices in this browser</b>
-                                <span class="bd-hint" id="bd-storage">-</span></div>
                             <div id="bd-devicelist" class="bd-devlist"></div>
+                            <div class="bd-hint bd-devlist-foot" id="bd-storage">-</div>
                         </div>
                     </div>
                 </section>

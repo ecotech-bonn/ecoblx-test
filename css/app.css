@@ -1508,13 +1508,9 @@ dialog {
 }
 
 /* Geraete mit Daten in diesem Browser (Block Erweitert) */
-.bd-devlist-head {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: 0.3em 1em;
-    margin-bottom: 0.6em;
+/* Speicherverbrauch des Browsers unter der Geraeteliste */
+.bd-devlist-foot {
+    margin-top: 0.6em;
 }
 
 .bd-devlist {
