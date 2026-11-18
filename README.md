@@ -1,7 +1,7 @@
 ﻿# enviLog (Distribution)
 
 Automatisch erzeugte, minifizierte Version fuer GitHub Pages (envilog.app).
-Nicht direkt bearbeiten - Quelle: ecoblx, Commit 45b203c.
+Nicht direkt bearbeiten - Quelle: ecoblx, Commit 058e394.
 
 - App: Wurzelverzeichnis (https://envilog.app/)
 - `app/`: alte Adresse, nur Weiterleitung (Quelle: ecoblx `make/pages_legacy_app/`)
