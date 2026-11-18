@@ -1659,9 +1659,16 @@ button.bd-devitem {
     }
 }
 
-/* Grafik-Dialog (lib/ltx-view): feste Breite, Farben aus den App-Tokens (id: staerker als die Modul-Standards) */
+/* Grafik-Dialog (lib/ltx-view): ganze Fensterbreite (breite Diagramme, viele Kacheln nebeneinander), Farben aus den
+   App-Tokens (id: staerker als die Modul-Standards). % statt vw: bezieht sich auf das Fenster ohne Scrollleiste.
+   Schmal (<= 600px) gilt weiter das Blatt von unten (Regel oben, staerker) */
+dialog:has(.bd-chart) {
+    width: calc(100% - 1.5em);
+    max-width: none;
+}
+
 .bd-chart {
-    width: min(1200px, calc(92vw - 2.8em));
+    width: 100%;
     box-sizing: border-box;
 }
 
